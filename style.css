@@ -1,71 +1,198 @@
+/* --- CONFIGURACIÓN BASE DE PÁGINA --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
 body {
-  margin: 0;
-  background: #0b0b0b;
-  color: white;
-  font-family: Arial, sans-serif;
+    background-color: #050505;
+    /* Cuadrícula de fondo */
+    background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    background-position: center center;
+    color: #ffffff;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
 }
 
-/* CONTENEDOR */
-[data-scroll-container] {
-  overflow: hidden;
+.container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 160px 0;
+    position: relative;
+    z-index: 2;
 }
 
-/* SECCIONES */
-.section {
-  min-height: 100vh;
-  padding: 120px 15%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
+/* --- COLORES --- */
+.cyan { color: #00aaff; }
+.magenta { color: #ff007f; }
+.magenta-text { color: #ff007f; letter-spacing: 2px; }
+.yellow-text { color: #e6ff00; letter-spacing: 2px; }
+.muted-text { color: #888888; }
 
-/* alternancia visual */
-.dark {
-  background: #111;
-}
-
-/* HERO */
+/* --- HERO ENTRADA LIMPIA --- */
 .hero {
-  text-align: center;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
 }
 
-/* PALABRA */
-.word {
-  font-size: 4rem;
-  display: flex;
-  justify-content: center;
-  gap: 5px;
-  cursor: pointer;
+.center-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 
-/* LETRAS */
-.word span {
-  display: inline-block;
-  transition: transform 0.6s ease, opacity 0.6s ease;
+/* --- TÍTULOS --- */
+.section-title, .sub-section-title, .large-phrase, .huge-white-title {
+    font-size: 4rem;
+    font-weight: 900;
+    line-height: 1.1;
+    text-transform: uppercase;
+    margin-bottom: 20px;
 }
 
-/* FRAGMENTACIÓN */
-.word.active span {
-  transform: translate(
-    calc(var(--x) * 80px),
-    calc(var(--y) * 80px)
-  ) rotate(25deg);
-  opacity: 0.25;
+.outlined-title {
+    font-size: 6rem;
+    font-weight: 900;
+    color: transparent;
+    -webkit-text-stroke: 1.5px #ffffff;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
 }
 
-/* SUBTITULO */
 .subtitle {
-  margin-top: 20px;
-  opacity: 0.6;
+    font-size: 1.2rem;
+    max-width: 800px;
+    margin-bottom: 20px;
+    line-height: 1.6;
 }
 
-/* TEXTO */
-h2 {
-  font-size: 2rem;
-  margin-bottom: 10px;
+.subtitle.centered {
+    text-align: center;
+    color: #aaaaaa;
+    max-width: 600px;
 }
 
-p {
-  opacity: 0.8;
-  max-width: 600px;
+.fade-in-text {
+    opacity: 0;
+    animation: fadeInUI 1s ease-out forwards;
+    animation-delay: 0.5s;
 }
+
+@keyframes fadeInUI {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- PARALLAX DE FONDO (LAS 3 PIEZAS GRANDES) --- */
+.parallax-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.floating-piece {
+    position: absolute;
+    opacity: 0.25;
+    transition: transform 0.12s ease-out;
+}
+
+.piece-t { top: 25%; left: 10%; }
+.piece-l { top: 70%; right: 8%; }
+.piece-i { top: 40%; right: 25%; }
+
+/* --- ENJAMBRE DE PIEZAS DINÁMICAS --- */
+#enjambre-piezas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none; 
+    z-index: 1;
+    overflow: hidden;
+}
+
+.pieza-dinamica {
+    position: absolute;
+    opacity: 0.15;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease;
+    will-change: transform;
+}
+
+.is-scrolling .pieza-dinamica {
+    opacity: 0.8;
+    filter: drop-shadow(0 0 8px currentColor);
+}
+
+/* --- CONTENEDORES DE IMÁGENES (ESTILO WIREFRAME) --- */
+.wireframe-placeholder {
+    width: 100%;
+    border: 2px dashed #333;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-family: monospace;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    background: rgba(255, 255, 255, 0.02);
+    margin-bottom: 40px;
+    transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.wireframe-placeholder:hover {
+    border-color: #666;
+    color: #aaa;
+}
+
+.main-image { min-height: 450px; }
+.system-grid { display: flex; gap: 20px; margin-bottom: 40px; }
+.piece-box { flex: 1; min-height: 200px; margin-bottom: 0; }
+.sequence-box { min-height: 300px; }
+.gallery-box { min-height: 500px; }
+
+/* --- REVELACIÓN INTERSECTION OBSERVER --- */
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 1.4s cubic-bezier(0.16, 1, 0.3, 1), transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animate-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.delay-1 { transition-delay: 0.15s; }
+
+/* --- PERSONALIZACIÓN DEL SCROLLBAR --- */
+::-webkit-scrollbar { width: 12px; }
+::-webkit-scrollbar-track { background: #050505; border-left: 1px solid rgba(255,255,255,0.05); }
+::-webkit-scrollbar-thumb {
+    background-color: #ff007f;
+    border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover { background-color: #00aaff; }
