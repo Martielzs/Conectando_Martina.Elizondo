@@ -15,7 +15,9 @@
             <li><a href="#mecanica" class="nav-link">Mecánica</a></li>
             <li><a href="#mas-alla" class="nav-link">Más Allá</a></li>
             <li><a href="#conceptos" class="nav-link">Conceptos</a></li>
-            <li><a href="#exploracion" class="nav-link">Exploración</a></li>
+            <li><a href="#exploracion" class="nav-link">Fundamento</a></li>
+             <li><a href="#exploracion" class="nav-link">Sistema</a></li>
+              <li><a href="#exploracion" class="nav-link">Exploración</a></li>
         </ul>
     </nav>
 
@@ -296,71 +298,67 @@
         <p class="section-text reveal">Durante el juego, cada elección modifica el recorrido y condiciona las conexiones que pueden establecerse posteriormente, dando lugar a distintas configuraciones y resultados. A medida que las piezas se relacionan entre sí, se construye un sistema dinámico en el que cada elemento influye en el conjunto.</p>
     </section>
 
-    <section class="seccion-diagrama-locomotive">
-        <div class="section-header reveal">
-            <span class="section-number">07. MAPA CONCEPTUAL</span>
-            <h2 class="section-title">El Sistema <span class="magenta-text">en Relaciones</span></h2>
+<section class="seccion-diagrama-locomotive" data-scroll-section>
+    
+    <div class="section-header reveal" data-scroll data-scroll-speed="1">
+        <span class="section-number">07. MAPA CONCEPTUAL</span>
+        <h2 class="section-title">
+            El Sistema <br>
+            <span class="magenta-text">en Relaciones</span>
+        </h2>
+    </div>
+
+    <div class="contenedor-flujo-lineal" style="height: 600px;">
+        
+        <svg class="svg-flujo-continuo" viewBox="0 0 1000 600" preserveAspectRatio="none">
+            <path class="linea-bucle-animada" d="M 40 50 L 320 50 L 320 170 L 680 170 L 680 300 L 250 300 L 250 430 L 700 430 L 700 560" />
+            
+            <circle class="punto-nodo" cx="40" cy="50" r="5" fill="#00aaff" />
+            <circle class="punto-nodo" cx="320" cy="170" r="5" fill="#ff007f" />
+            <circle class="punto-nodo" cx="680" cy="300" r="5" fill="#e6ff00" />
+            <circle class="punto-nodo" cx="250" cy="430" r="5" fill="#00aaff" />
+            <circle class="punto-nodo" cx="700" cy="560" r="6" fill="#ff007f" />
+        </svg>
+
+        <div class="hito-sistema" style="top: 15px; left: 70px;" data-scroll data-scroll-speed="1.1">
+            <span class="numero-hito"></span>
+            <h3>Conexión</h3>
+            <p>Encuentro inicial entre unidades independientes.</p>
         </div>
 
-        <div class="lienzo-locomotive-container">
-            <svg class="lineas-constelacion" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
-                <path class="trazo-neon tn-1" d="M 150 300 Q 300 150, 450 350" />
-                <path class="trazo-neon tn-2" d="M 450 350 Q 550 100, 700 200" />
-                <path class="trazo-neon tn-3" d="M 450 350 Q 520 480, 650 420" />
-                <path class="trazo-neon tn-4" d="M 700 200 Q 800 220, 880 300" />
-                <path class="trazo-neon tn-5" d="M 650 420 Q 780 380, 880 300" />
-                <path class="trazo-neon tn-cruzada" d="M 150 300 Q 500 80, 880 300" />
-            </svg>
-
-            <div class="nodo-parallax" data-scroll-speed="1.5" style="top: 50%; left: 15%;">
-                <div class="anclaje-glow"><span class="onda-expansion"></span></div>
-                <div class="tarjeta-contenido-neon">
-                    <span class="tag-index">// 01</span>
-                    <h3>Conexión</h3>
-                    <p>Encuentro inicial entre unidades independientes.</p>
-                </div>
-            </div>
-
-            <div class="nodo-parallax" data-scroll-speed="2.8" style="top: 58%; left: 45%;">
-                <div class="anclaje-glow"><span class="onda-expansion"></span></div>
-                <div class="tarjeta-contenido-neon">
-                    <span class="tag-index">// 02</span>
-                    <h3>Relación</h3>
-                    <p>Vínculo estructural que altera las propiedades.</p>
-                </div>
-            </div>
-
-            <div class="nodo-parallax" data-scroll-speed="1.2" style="top: 30%; left: 70%;">
-                <div class="anclaje-glow"><span class="onda-expansion"></span></div>
-                <div class="tarjeta-contenido-neon">
-                    <span class="tag-index">// 03</span>
-                    <h3>Trayectoria</h3>
-                    <p>Vector de movimiento generado por las piezas.</p>
-                </div>
-            </div>
-
-            <div class="nodo-parallax" data-scroll-speed="3.2" style="top: 70%; left: 65%;">
-                <div class="anclaje-glow"><span class="onda-expansion"></span></div>
-                <div class="tarjeta-contenido-neon">
-                    <span class="tag-index">// 04</span>
-                    <h3>Exploración</h3>
-                    <p>Reconocimiento interactivo de los recorridos.</p>
-                </div>
-            </div>
-
-            <div class="nodo-parallax" data-scroll-speed="2.0" style="top: 50%; left: 88%;">
-                <div class="anclaje-glow nodo-sistema-core"><span class="onda-expansion"></span></div>
-                <div class="tarjeta-contenido-neon">
-                    <span class="tag-index" style="color: var(--magenta);">// 05</span>
-                    <h3 style="color: var(--magenta); text-shadow: 0 0 10px rgba(255,0,127,0.4);">Sistema</h3>
-                    <p>La estructura emergente que unifica el todo.</p>
-                </div>
-            </div>
+        <div class="hito-sistema" style="top: 135px; left: 360px;" data-scroll data-scroll-speed="1.2">
+            <span class="numero-hito"></span>
+            <h3>Relación</h3>
+            <p>Vínculo estructural que altera las propiedades.</p>
         </div>
-    </section>
 
+        <div class="hito-sistema" style="top: 265px; left: 720px;" data-scroll data-scroll-speed="0.9">
+            <span class="numero-hito"> </span>
+            <h3>Trayectoria</h3>
+            <p>Vector de movimiento generado por las piezas.</p>
+        </div>
+
+        <div class="hito-sistema" style="top: 395px; left: 290px;" data-scroll data-scroll-speed="1.3">
+            <span class="numero-hito"></span>
+            <h3>Exploración</h3>
+            <p>Reconocimiento interactivo de los recorridos.</p>
+        </div>
+
+        <div class="hito-sistema" style="top: 525px; left: 400px;" data-scroll data-scroll-speed="1.0">
+            <span class="numero-hito" style="color: var(--magenta);">// 05</span>
+            <h3>Sistema</h3>
+            <p>La estructura emergente que unifica el todo.</p>
+        </div>
+
+    </div>
+</section>
+    </div>
+</section>
+</section>
+    </div>
+</section>
   <section id="cierre" class="section scroll-section" style="min-height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
-        <span class="section-number reveal">08. CIERRE</span>
+        <span class="section-number reveal">CIERRE</span>
         <h2 class="section-title reveal" style="max-width: 100%; font-size: clamp(3rem, 7vw, 7rem); margin-bottom: 4vh;">
             Las relaciones<br>construyen <span class="cyan">significado.</span>
         </h2>

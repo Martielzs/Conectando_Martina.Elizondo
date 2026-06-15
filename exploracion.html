@@ -3,18 +3,348 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conectando — Excavación de Sistemas</title>
-    <link rel="stylesheet" href="style_exploracion.css">
+    <title>Conectando — Instalación Inmersiva Completa (5 Etapas)</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #030303;
+            cursor: crosshair;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            z-index: 1;
+        }
+    </style>
 </head>
 <body>
 
     <canvas id="canvas-instalacion"></canvas>
 
-    <div class="overlay-revelacion" id="interfaz-final">
-        <h1 class="titulo-final">CONECTANDO</h1>
-        <p class="subtitulo-final">El sistema oculto en las interacciones cotidianas.</p>
-    </div>
+    <script>
+        const canvas = document.getElementById('canvas-instalacion');
+        const ctx = canvas.getContext('2d');
 
-    <script src="script_exploracion.js"></script>
+        const tamanoUnidad = 45; 
+        let columnas, filasPantalla, filasTotal;
+        let matrizTablero = [];
+        
+        // MOTOR CINEMÁTICO DE CINCO ETAPAS
+        let etapaActual = 1; 
+        let transicionActiva = false;
+        let scrollYActual = 0;
+        let scrollYObjetivo = 0;
+        
+        // Control de Escala Global (Zoom Out para Emergencia y Revelación)
+        let escalaActual = 1.0;
+        let escalaObjetivo = 1.0;
+
+        // DATOS INTERACTIVOS POR ETAPA
+        let caminoE1 = []; 
+        let rutaE1 = []; 
+        let indiceE1 = 1;
+
+        let nodosE2 = [];
+        let lineasE2 = [];
+
+        let lineasE3 = [];
+        let contadorExpansionE3 = 0;
+        let mouseMoviendoseE3 = 0;
+
+        let letrasRevelacionE5 = [];
+
+        function inicializarInstalacion() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            columnas = Math.ceil(canvas.width / tamanoUnidad);
+            filasPantalla = Math.ceil(canvas.height / tamanoUnidad);
+            filasTotal = filasPantalla * 5; // Espacio vertical para las 5 pantallas lineales
+
+            const centroX = Math.floor(columnas / 2);
+            
+            // Alturas de inicio de cada pantalla en píxeles
+            const yP1 = 0;
+            const yP2 = canvas.height;
+            const yP3 = canvas.height * 2;
+            const yP4 = canvas.height * 3;
+            const yP5 = canvas.height * 4;
+
+            // Construcción de la súper matriz
+            matrizTablero = [];
+            for (let c = 0; c < columnas + 30; c++) {
+                matrizTablero[c] = [];
+                for (let f = 0; f < filasTotal + 30; f++) {
+                    matrizTablero[c][f] = { col: c, fila: f, esMetaE1: false, estadoE2: 'vacio', color: '#00aaff' };
+                }
+            }
+
+            // ==========================================
+            // CONFIGURACIÓN PANTALLA 1: Arrastre Ortogonal
+            // ==========================================
+            rutaE1 = [];
+            const fE1 = Math.floor(filasPantalla / 2);
+            for (let c = centroX; c >= Math.max(0, centroX - 5); c--) rutaE1.push({c: c, f: fE1, col: '#00aaff'});
+            let u = rutaE1[rutaE1.length - 1];
+            for (let f = u.f + 1; f <= fE1 + 4; f++) rutaE1.push({c: u.c, f: f, col: '#ff007f'});
+            u = rutaE1[rutaE1.length - 1];
+            for (let c = u.c + 1; c <= u.c + 10; c++) rutaE1.push({c: c, f: u.f, col: '#e6ff00'});
+            u = rutaE1[rutaE1.length - 1];
+            if(matrizTablero[u.c] && matrizTablero[u.c][u.f]) matrizTablero[u.c][u.f].esMetaE1 = true;
+            caminoE1 = [{ c: centroX, f: fE1, color: '#ffffff' }];
+
+            // ==========================================
+            // CONFIGURACIÓN PANTALLA 2: Red de Relaciones Clics
+            // ==========================================
+            nodosE2 = []; lineasE2 = [];
+            const fE2Base = filasPantalla;
+            for (let c = 2; c < columnas - 2; c += 4) {
+                for (let f = fE2Base + 2; f < fE2Base + filasPantalla - 2; f += 2) {
+                    let rc = c + Math.floor(Math.sin(f) * 1.1);
+                    let rf = f + Math.floor(Math.cos(c) * 0.7);
+                    const cols = ['#00aaff', '#ff007f', '#e6ff00'];
+                    matrizTablero[rc][rf].estadoE2 = 'dormido';
+                    matrizTablero[rc][rf].color = cols[(rc+rf)%cols.length];
+                    nodosE2.push({ c: rc, f: rf, estado: 'dormido', color: matrizTablero[rc][rf].color });
+                }
+            }
+            let coreE2 = nodosE2[Math.floor(nodosE2.length / 2)];
+            if (coreE2) { coreE2.estado = 'activo'; matrizTablero[coreE2.c][coreE2.f].estadoE2 = 'activo'; }
+
+            // ==========================================
+            // CONFIGURACIÓN PANTALLA 3: Expansión Autónoma
+            // ==========================================
+            lineasE3 = [];
+            const fE3Base = filasPantalla * 2;
+            // Generamos una semilla central de líneas ortogonales
+            for(let i=0; i<12; i++) {
+                lineasE3.push({
+                    cX: centroX + Math.floor(Math.sin(i)*5), cY: fE3Base + 6 + Math.floor(Math.cos(i)*4),
+                    dirX: Math.random() > 0.5 ? (Math.random() > 0.5 ? 1 : -1) : 0,
+                    dirY: Math.random() > 0.5 ? (Math.random() > 0.5 ? 1 : -1) : 0,
+                    color: ['#00aaff', '#ff007f', '#e6ff00'][i%3], largo: 1
+                });
+            }
+
+            // ==========================================
+            // CONFIGURACIÓN PANTALLA 5: La Revelación Final (CONECTANDO)
+            // ==========================================
+            letrasRevelacionE5 = [];
+            const fE5Base = filasPantalla * 4 + 4;
+            // Mapeo vectorial de coordenadas relativas para dibujar cada letra en la grilla
+            const mapaLetras = {
+                'C': [{dx:0,dy:0},{dx:0,dy:1},{dx:0,dy:2},{dx:0,dy:3},{dx:0,dy:4},{dx:1,dy:0},{dx:2,dy:0},{dx:1,dy:4},{dx:2,dy:4}],
+                'O': [{dx:0,dy:0},{dx:0,dy:4},{dx:2,dy:0},{dx:2,dy:4},{dx:0,dy:1},{dx:0,dy:2},{dx:0,dy:3},{dx:2,dy:1},{dx:2,dy:2},{dx:2,dy:3}],
+                'N': [{dx:0,dy:0},{dx:0,dy:1},{dx:0,dy:2},{dx:0,dy:3},{dx:0,dy:4},{dx:1,dy:1},{dx:1,dy:2},{dx:2,dy:3},{dx:3,dy:0},{dx:3,dy:1},{dx:3,dy:2},{dx:3,dy:3},{dx:3,dy:4}],
+                'E': [{dx:0,dy:0},{dx:0,dy:1},{dx:0,dy:2},{dx:0,dy:3},{dx:0,dy:4},{dx:1,dy:0},{dx:2,dy:0},{dx:1,dy:2},{dx:1,dy:4},{dx:2,dy:4}],
+                'C2':[{dx:0,dy:0},{dx:0,dy:1},{dx:0,dy:2},{dx:0,dy:3},{dx:0,dy:4},{dx:1,dy:0},{dx:2,dy:0},{dx:1,dy:4},{dx:2,dy:4}],
+                'T': [{dx:0,dy:0},{dx:1,dy:0},{dx:2,dy:0},{dx:1,dy:1},{dx:1,dy:2},{dx:1,dy:3},{dx:1,dy:4}],
+                'A': [{dx:0,dy:1},{dx:0,dy:2},{dx:0,dy:3},{dx:0,dy:4},{dx:1,dy:0},{dx:2,dy:0},{dx:3,dy:1},{dx:3,dy:2},{dx:3,dy:3},{dx:3,dy:4},{dx:1,dy:2},{dx:2,dy:2}],
+                'N2':[{dx:0,dy:0},{dx:0,dy:1},{dx:0,dy:2},{dx:0,dy:3},{dx:0,dy:4},{dx:1,dy:1},{dx:1,dy:2},{dx:2,dy:3},{dx:3,dy:0},{dx:3,dy:1},{dx:3,dy:2},{dx:3,dy:3},{dx:3,dy:4}],
+                'D': [{dx:0,dy:0},{dx:0,dy:1},{dx:0,dy:2},{dx:0,dy:3},{dx:0,dy:4},{dx:1,dy:0},{dx:2,dy:1},{dx:2,dy:2},{dx:2,dy:3},{dx:1,dy:4}],
+                'O2':[{dx:0,dy:0},{dx:0,dy:4},{dx:2,dy:0},{dx:2,dy:4},{dx:0,dy:1},{dx:0,dy:2},{dx:0,dy:3},{dx:2,dy:1},{dx:2,dy:2},{dx:2,dy:3}]
+            };
+
+            let inicioXLetras = Math.floor(centroX - 22);
+            Object.keys(mapaLetras).forEach((letra, espacio) => {
+                let desX = inicioXLetras + (espacio * 4.5);
+                mapaLetras[letra].forEach(pt => {
+                    const colores = ['#00aaff', '#ff007f', '#e6ff00'];
+                    letrasRevelacionE5.push({
+                        c: desX + pt.dx, f: fE5Base + pt.dy,
+                        color: colores[(desX + pt.dx + pt.dy) % colores.length], activo: false
+                    });
+                });
+            });
+
+            transicionActiva = false; scrollYActual = 0; scrollYObjetivo = 0; etapaActual = 1; escalaActual = 1.0; escalaObjetivo = 1.0;
+        }
+
+        // CONTROL DE INTERACCIÓN POR MOVIMIENTO (ETAPAS 1, 3 Y MOUSE GENERATOR)
+        window.addEventListener('mousemove', (e) => {
+            if (transicionActiva) return;
+
+            // Desenredamos la posición del ratón compensando el scroll y la escala dinámica
+            const canvasX = (e.clientX) / escalaActual;
+            const canvasY = (e.clientY + scrollYActual) / escalaActual;
+
+            const mX = Math.floor(canvasX / tamanoUnidad);
+            const mY = Math.floor(canvasY / tamanoUnidad);
+
+            if (etapaActual === 1) {
+                const prox = rutaE1[indiceE1];
+                if (prox && mX === prox.c && mY === prox.f) {
+                    caminoE1.push({ c: mX, f: mY, color: prox.col });
+                    indiceE1++;
+                    if (matrizTablero[mX][mY].esMetaE1) { transicionActiva = true; scrollYObjetivo = canvas.height; }
+                }
+            }
+            else if (etapaActual === 3) {
+                mouseMoviendoseE3 = 15; // Inyecta vibración cinemática temporal a la red
+            }
+        });
+
+        // CONTROL DE INTERACCIÓN POR CLIC (ETAPA 2)
+        window.addEventListener('click', (e) => {
+            if (etapaActual !== 2 || transicionActiva) return;
+
+            const cX = Math.floor(e.clientX / tamanoUnidad);
+            const cY = Math.floor((e.clientY + scrollYActual) / tamanoUnidad);
+
+            let clickeado = nodosE2.find(n => n.c === cX && n.f === cY && n.estado === 'dormido');
+            if (clickeado) {
+                clickeado.estado = 'activo';
+                matrizTablero[cX][cY].estadoE2 = 'activo';
+
+                nodosE2.forEach(o => {
+                    if (o !== clickeado && o.estado === 'activo') {
+                        if (Math.hypot(o.c - clickeado.c, o.f - clickeado.f) <= 6) {
+                            lineasE2.push({ x1: clickeado.c, y1: clickeado.f, x2: o.c, y2: o.f, col: clickeado.color });
+                        }
+                    }
+                });
+
+                if (nodosE2.filter(n => n.estado === 'activo').length >= 10) {
+                    transicionActiva = true; scrollYObjetivo = canvas.height * 2;
+                }
+            }
+        });
+
+        /* ==========================================================
+           BUCLE OPERATIVO PRINCIPAL DE CONSOLIDACIÓN VISUAL
+           ========================================================== */
+        let tE5 = 0;
+        function loopInstalacion() {
+            ctx.fillStyle = '#030303';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Ajustes del travelling elástico y cambios de fase mecánicos
+            if (transicionActiva) {
+                scrollYActual += (scrollYObjetivo - scrollYActual) * 0.025;
+                escalaActual += (escalaObjetivo - escalaActual) * 0.02;
+
+                if (scrollYActual >= canvas.height - 2 && etapaActual === 1) { etapaActual = 2; transicionActiva = false; scrollYActual = canvas.height; }
+                if (scrollYActual >= canvas.height * 2 - 2 && etapaActual === 2) { etapaActual = 3; transicionActiva = false; scrollYActual = canvas.height * 2; }
+                if (scrollYActual >= canvas.height * 3 - 2 && etapaActual === 3) { 
+                    etapaActual = 4; 
+                    scrollYObjetivo = canvas.height * 4; // Avanzamos directo a la revelación final
+                    escalaObjetivo = 0.38; // ZOOM OUT MONUMENTAL: La retícula se minimiza
+                }
+                if (scrollYActual >= canvas.height * 4 - 5 && etapaActual === 4) { etapaActual = 5; transicionActiva = false; scrollYActual = canvas.height * 4; }
+            }
+
+            // EVOLUCIÓN AUTOMÁTICA ETAPA 3 (Expansión autónoma)
+            if (etapaActual === 3 && !transicionActiva) {
+                contadorExpansionE3++;
+                if (contadorExpansionE3 % 4 === 0 && lineasE3.length < 180) {
+                    let clon = Object.assign({}, lineasE3[Math.floor(Math.random() * lineasE3.length)]);
+                    if (clon) {
+                        clon.cX += clon.dirX; clon.cY += clon.dirY;
+                        if (Math.random() < 0.25) { // Cambios de dirección ortogonal elástica
+                            clon.dirX = Math.random() > 0.5 ? (Math.random() > 0.5 ? 1 : -1) : 0;
+                            clon.dirY = clon.dirX === 0 ? (Math.random() > 0.5 ? 1 : -1) : 0;
+                        }
+                        lineasE3.push(clon);
+                    }
+                }
+                if (mouseMoviendoseE3 > 0) mouseMoviendoseE3--;
+                if (lineasE3.length >= 140) { transicionActiva = true; scrollYObjetivo = canvas.height * 3; }
+            }
+
+            ctx.save();
+            
+            // EJECUCIÓN CENTRAL DE CÁMARA (Ajuste de Scroll y Escala de alejamiento)
+            if (etapaActual >= 4) {
+                // Centramos la visualización del zoom out para que la palabra no se desplace de foco
+                ctx.translate(canvas.width / 2, canvas.height / 2);
+                ctx.scale(escalaActual, escalaActual);
+                ctx.translate(-canvas.width / 2, -(scrollYActual + canvas.height / 2));
+            } else {
+                ctx.translate(0, -scrollYActual);
+            }
+
+            // ==========================================================
+            // RENDER REQUISITO: CUADRÍCULA DE FONDO BIEN MARCADA
+            // ==========================================================
+            ctx.lineWidth = 1.0;
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)'; // Subimos nitidez para marcar presencia estructural
+            for (let c = 0; c < columnas + 25; c++) {
+                for (let f = 0; f < filasTotal; f++) {
+                    ctx.strokeRect(c * tamanoUnidad, f * tamanoUnidad, tamanoUnidad, tamanoUnidad);
+                }
+            }
+
+            // DIBUJO PANTALLA 1
+            for (let i = 0; i < caminoE1.length; i++) {
+                ctx.fillStyle = caminoE1[i].color;
+                ctx.fillRect(caminoE1[i].c * tamanoUnidad + 1, caminoE1[i].f * tamanoUnidad + 1, tamanoUnidad - 2, tamanoUnidad - 2);
+            }
+
+            // DIBUJO PANTALLA 2
+            lineasE2.forEach(l => {
+                ctx.strokeStyle = l.col; ctx.lineWidth = 4; ctx.beginPath();
+                ctx.moveTo(l.x1*tamanoUnidad + tamanoUnidad/2, l.y1*tamanoUnidad + tamanoUnidad/2);
+                ctx.lineTo(l.x2*tamanoUnidad + tamanoUnidad/2, l.y2*tamanoUnidad + tamanoUnidad/2); ctx.stroke();
+            });
+            nodosE2.forEach(n => {
+                ctx.fillStyle = n.estado === 'activo' ? n.color : 'rgba(255, 255, 255, 0.1)';
+                ctx.fillRect(n.c * tamanoUnidad + 2, n.f * tamanoUnidad + 2, tamanoUnidad - 4, tamanoUnidad - 4);
+            });
+
+            // DIBUJO PANTALLA 3 (Estructuras vivas vibratorias)
+            lineasE3.forEach(l => {
+                let jitter = mouseMoviendoseE3 > 0 ? (Math.random() * 4 - 2) : 0;
+                ctx.fillStyle = l.color;
+                ctx.fillRect(l.cX * tamanoUnidad + 1 + jitter, l.cY * tamanoUnidad + 1 + jitter, tamanoUnidad - 2, tamanoUnidad - 2);
+            });
+
+            // ==========================================================
+            // DIBUJO PANTALLA 4 Y 5: EMERGENCIA Y REVELACIÓN FINAL DE LA PALABRA
+            // ==========================================================
+            if (etapaActual >= 4) {
+                tE5 += 0.02;
+                letrasRevelacionE5.forEach((pt, idx) => {
+                    // Animación elástica escalonada para que la palabra se arme de forma secuencial sutil
+                    if (etapaActual === 5 || (etapaActual === 4 && idx < (tE5 * 18))) {
+                        pt.activo = true;
+                    }
+
+                    if (pt.activo) {
+                        ctx.fillStyle = pt.color;
+                        ctx.fillRect(pt.c * tamanoUnidad + 1, pt.f * tamanoUnidad + 1, tamanoUnidad - 2, tamanoUnidad - 2);
+
+                        // Resplandor de alta tensión que unifica los fragmentos a la distancia
+                        if (etapaActual === 5) {
+                            ctx.fillStyle = `rgba(255, 255, 255, ${0.25 + Math.sin(tE5 + idx) * 0.15})`;
+                            ctx.fillRect(pt.c * tamanoUnidad + 4, pt.f * tamanoUnidad + 4, tamanoUnidad - 8, tamanoUnidad - 8);
+                        }
+                    }
+                });
+            }
+
+            ctx.restore();
+            requestAnimationFrame(loopInstalacion);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            inicializarInstalacion();
+            requestAnimationFrame(loopInstalacion);
+        });
+        window.addEventListener('resize', inicializarInstalacion);
+    </script>
 </body>
 </html>

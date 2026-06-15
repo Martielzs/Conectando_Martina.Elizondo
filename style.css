@@ -1,6 +1,6 @@
-/* =========================================
+/* ==========================================================
    1. ESTILOS BASE Y TIPOGRAFÍA ORIGINAL
-   ========================================= */
+   ========================================================== */
 * { 
     margin: 0; 
     padding: 0; 
@@ -34,9 +34,9 @@ body {
 .magenta-text { color: var(--magenta); }
 .yellow-text { color: var(--yellow); }
 
-/* =========================================
+/* ==========================================================
    2. NAVEGACIÓN FIJA Y LIMPIA
-   ========================================= */
+   ========================================================== */
 .franja-nav {
     position: fixed; 
     top: 0; 
@@ -80,9 +80,9 @@ body {
 .nav-link:hover { color: #ffffff; }
 .nav-link.active-nav { color: var(--cyan); }
 
-/* =========================================
+/* ==========================================================
    3. PORTADA IDÉNTICA A LA REFERENCIA
-   ========================================= */
+   ========================================================== */
 .hero {
     min-height: 100vh; 
     display: flex; 
@@ -172,9 +172,9 @@ body {
     } 
 }
 
-/* =========================================
+/* ==========================================================
    4. MARQUESINA RECTA Y SUAVE
-   ========================================= */
+   ========================================================== */
 .marquee-container {
     width: 100%; 
     padding: 2.5vh 0; 
@@ -209,9 +209,9 @@ body {
     100% { transform: translateX(-50%); } 
 }
 
-/* =========================================
+/* ==========================================================
    5. SECCIONES DE TEXTO (FORMATO LIMPIO)
-   ========================================= */
+   ========================================================== */
 .section { 
     padding: 10vh 8vw; 
     display: flex; 
@@ -250,9 +250,9 @@ body {
     margin-bottom: 3vh;
 }
 
-/* =========================================
+/* ==========================================================
    6. WIREFRAMES & ESQUEMA SVG (FIGMA)
-   ========================================= */
+   ========================================================== */
 .wireframe-box {
     border: 1px solid #333; 
     border-radius: 4px; 
@@ -331,9 +331,9 @@ body {
     color: #000; 
 }
 
-/* =========================================
+/* ==========================================================
    7. ANIMACIONES DE REVELACIÓN (SCROLL)
-   ========================================= */
+   ========================================================== */
 .reveal { 
     opacity: 0; 
     transform: translateY(60px); 
@@ -345,9 +345,9 @@ body {
     transform: translateY(0); 
 }
 
-/* =========================================
+/* ==========================================================
    8. FONDO DE PIEZAS (FLOTAN SOLAS)
-   ========================================= */
+   ========================================================== */
 .bg-pieces-container {
     position: fixed; 
     top: 0; 
@@ -379,8 +379,6 @@ body {
 /* ==========================================================
    9. CONFIGURACIÓN EN DOS COLUMNAS (TEXTO E INTERACCIÓN 3D)
    ========================================================== */
-
-/* Contenedor padre que divide la pantalla en 2 */
 .bloque-dos-columnas {
     display: flex;
     flex-direction: row;
@@ -388,34 +386,31 @@ body {
     align-items: center;
     width: 100%;
     max-width: 1200px;
-    gap: 4vw; /* Espacio intermedio entre texto y render */
+    gap: 4vw; 
     margin-bottom: 6vh;
 }
 
-/* Columna de los textos (se va a la izquierda) */
 .columna-texto {
-    flex: 1.2; /* Toma un poco más de ancho para que el texto respire */
+    flex: 1.2; 
     display: flex;
     flex-direction: column;
 }
 
 .columna-texto .section-text {
-    font-size: clamp(1rem, 1.5vw, 1.35rem); /* Achicamos un pelito el texto para que calce bien al lado del 3D */
+    font-size: clamp(1rem, 1.5vw, 1.35rem); 
     line-height: 1.6;
     color: #bbbbbb;
     margin-bottom: 2.5vh;
     text-align: left;
 }
 
-/* Columna del render (se va a la derecha) */
 .columna-render {
-    flex: 0.8; /* Espacio controlado para el visor */
+    flex: 0.8; 
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-/* Redefinimos el contenedor 3D original para que calce en su columna */
 .contenedor-3d {
     width: 100%;
     max-width: 420px; 
@@ -434,7 +429,6 @@ model-viewer {
     outline: none;
 }
 
-/* RESPONSIVE: Si entran desde un celular, las columnas se desarman y se apilan verticalmente */
 @media (max-width: 850px) {
     .bloque-dos-columnas {
         flex-direction: column;
@@ -448,6 +442,7 @@ model-viewer {
         height: 280px;
     }
 }
+
 /* ==========================================================
    10. MAQUETACIÓN ALINEADA A LA IZQUIERDA (ZONA MECÁNICA)
    ========================================================== */
@@ -495,7 +490,7 @@ model-viewer {
 
 .diagramas-comparativa .schema-box {
     width: 100%;
-    max-width: 460px;               
+    max-width: 460px;              
     height: 350px;                  
     margin-bottom: 2.5vh;           
 }
@@ -504,21 +499,14 @@ model-viewer {
     font-size: 0.9rem;
     color: #888;
     line-height: 1.5;
-    max-width: 420px;               
+    max-width: 420px;              
     margin: 0 auto;                 
 }
 
 /* ==========================================================
-   11. CONTROL DE DIAGRAMAS VECTORIALES EN BUCLE CONTINUO (CSS PERPETUO)
+   11. CONTROL DE DIAGRAMAS VECTORIALES EN BUCLE CONTINUO
    ========================================================== */
-
-/* --- DIAGRAMA A: Trayectorias en loop --- */
-.path-bucle-cyan-A {
-    stroke-dasharray: 800;
-    stroke-dashoffset: 800;
-    animation: loopDibujoCaminos 7s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-}
-.path-bucle-magenta-A {
+.path-bucle-cyan-A, .path-bucle-magenta-A {
     stroke-dasharray: 800;
     stroke-dashoffset: 800;
     animation: loopDibujoCaminos 7s cubic-bezier(0.4, 0, 0.2, 1) infinite;
@@ -527,11 +515,10 @@ model-viewer {
 @keyframes loopDibujoCaminos {
     0% { stroke-dashoffset: 800; opacity: 0; }
     5% { opacity: 1; }
-    40%, 80% { stroke-dashoffset: 0; opacity: 1; } /* Se queda pintado mostrando el flujo completo */
-    90%, 100% { stroke-dashoffset: -800; opacity: 0; } /* Se borra con elegancia hacia adelante */
+    40%, 80% { stroke-dashoffset: 0; opacity: 1; }
+    90%, 100% { stroke-dashoffset: -800; opacity: 0; }
 }
 
-/* --- DIAGRAMA B: Caminos base iniciales --- */
 .path-bucle-cyan-baseB, .path-bucle-magenta-baseB {
     stroke-dasharray: 800;
     stroke-dashoffset: 800;
@@ -544,22 +531,20 @@ model-viewer {
     90%, 100% { stroke-dashoffset: -800; opacity: 0; }
 }
 
-/* --- DIAGRAMA B: Ramificaciones nuevas (Aparecen desfasadas en secuencia) --- */
 .path-bucle-cyan-extB, .path-bucle-magenta-extB {
     stroke-dasharray: 400;
     stroke-dashoffset: 400;
     animation: loopExtensionesB 7s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 @keyframes loopExtensionesB {
-    0%, 30% { stroke-dashoffset: 400; opacity: 0; } /* Espera a que las bases lleguen al quiebre */
+    0%, 30% { stroke-dashoffset: 400; opacity: 0; }
     35% { opacity: 1; }
-    55%, 80% { stroke-dashoffset: 0; opacity: 1; } /* Muestra la salvación hacia arriba */
+    55%, 80% { stroke-dashoffset: 0; opacity: 1; }
     90%, 100% { stroke-dashoffset: -400; opacity: 0; }
 }
 
-
 /* ==========================================================
-   12. GALERÍA: CINTA DE DESPLAZAMIENTO HORIZONTAL EN BUCLE PERPETUO
+   12. GALERÍA: CINTA EN BUCLE PERPETUO
    ========================================================== */
 .galeria-cinta-container {
     width: 100vw;
@@ -592,7 +577,6 @@ model-viewer {
     display: flex;
     width: max-content;
     gap: 40px; 
-    /* ¡CORREGIDO! Ahora no se pausa al poner el mouse encima para cumplir tu regla */
     animation: scrollCintaHorizontal 32s linear infinite;
 }
 
@@ -671,13 +655,11 @@ model-viewer {
     opacity: 1;
 }
 
-/* Loop exacto calibrado para las 5 imágenes sin saltos */
 @keyframes scrollCintaHorizontal {
     0% { transform: translateX(0); }
     100% { transform: translateX(calc((-320px * 5) - (40px * 5))); }
 }
 
-/* RESPONSIVE */
 @media (max-width: 968px) {
     .diagramas-comparativa {
         flex-direction: column !important;
@@ -689,156 +671,145 @@ model-viewer {
         max-width: 100%;
     }
 }
+
+
 /* ==========================================================
-   DIAGRAMA CONCEPTUAL LOCOMOTIVE - FONDO OSCURO NEÓN
+   13. DIAGRAMA CONCEPTUAL LOCOMOTIVE - LÍNEA DETRÁS DEL TEXTO PROTEGIDO
    ========================================================== */
 .seccion-diagrama-locomotive {
-    width: 100%;
-    min-height: 120vh;
+    width: 100% !important;
+    min-height: 140vh; 
     background-color: #050505;
-    padding: 12vh 6vw;
+    padding: 12vh 8vw;
     display: flex;
     flex-direction: column;
     position: relative;
     overflow: hidden;
+    box-sizing: border-box;
 }
 
-.lienzo-locomotive-container {
+/* Encabezado original */
+.seccion-diagrama-locomotive .section-header {
+    text-align: left !important;
+    width: 100%;
+    margin-bottom: 6vh;
+}
+
+.seccion-diagrama-locomotive .section-title {
+    font-size: clamp(2.5rem, 6vw, 6rem); 
+    font-weight: 900; 
+    line-height: 0.95;
+    letter-spacing: -1px; 
+    text-transform: uppercase; 
+    text-align: left !important;
+}
+
+.seccion-diagrama-locomotive .magenta-text {
+    color: var(--magenta);
+    display: block; 
+}
+
+/* Contenedor del circuito interactivo */
+.seccion-diagrama-locomotive .contenedor-flujo-lineal {
     position: relative;
     width: 100%;
-    max-width: 1200px;
-    height: 650px;
-    margin-top: 5vh;
-    background: rgba(255, 255, 255, 0.01);
-    border: 1px solid rgba(255, 255, 255, 0.03);
-    border-radius: 8px;
+    max-width: 1050px;
+    height: 900px;
+    margin-top: 2vh;
 }
 
-.lineas-constelacion {
+/* SOLUCIÓN AL ENREDO: Bajamos el z-index del SVG a 1 para que corra por DETRÁS */
+.seccion-diagrama-locomotive .svg-flujo-continuo {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1;
+    z-index: 1; 
     pointer-events: none;
 }
 
-.trazo-neon {
+/* Animación de la línea en loop */
+.seccion-diagrama-locomotive .linea-bucle-animada {
     fill: none;
-    stroke: rgba(0, 170, 255, 0.25);
-    stroke-width: 1px;
+    stroke: var(--cyan);
+    stroke-width: 3px;
     stroke-linecap: round;
-    stroke-dasharray: 8,8;
+    stroke-linejoin: round;
+    stroke-dasharray: 1200;
+    stroke-dashoffset: 1200;
+    animation: flujoCircuitoContinuo 8s linear infinite;
+    filter: drop-shadow(0 0 5px rgba(0, 170, 255, 0.4));
 }
-.tn-2 { stroke: rgba(255, 0, 127, 0.2); }
-.tn-cruzada { stroke-width: 0.6px; stroke-dasharray: 3,3; opacity: 0.4; }
 
-.nodo-parallax {
+@keyframes flujoCircuitoContinuo {
+    0% { stroke-dashoffset: 1200; }
+    50% { stroke-dashoffset: 0; }
+    100% { stroke-dashoffset: -1200; }
+}
+
+.seccion-diagrama-locomotive .punto-nodo {
+    opacity: 0.8;
+}
+
+/* NODOS TIPOGRÁFICOS CON ESCUDO PROTECTOR ANTE LA LÍNEA */
+.seccion-diagrama-locomotive .hito-sistema {
     position: absolute;
-    transform: translate(-50%, -50%);
-    z-index: 5;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    will-change: transform;
-}
-
-.anclaje-glow {
-    width: 6px;
-    height: 6px;
-    background-color: var(--cyan);
-    border-radius: 50%;
-    position: relative;
-    box-shadow: 0 0 10px var(--cyan);
-    transition: transform 0.3s ease, background-color 0.3s ease;
-}
-.nodo-sistema-core {
-    width: 10px;
-    height: 10px;
-    background-color: var(--magenta);
-    box-shadow: 0 0 12px var(--magenta);
-}
-
-.onda-expansion {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    height: 100%;
-    border: 1px solid currentColor;
-    border-radius: 50%;
-    opacity: 0;
-    animation: pulsoFlotante 3.5s infinite;
-}
-.anclaje-glow .onda-expansion { color: var(--cyan); }
-.nodo-sistema-core .onda-expansion { color: var(--magenta); }
-
-@keyframes pulsoFlotante {
-    0% { width: 100%; height: 100%; opacity: 0.5; }
-    100% { width: 500%; height: 500%; opacity: 0; }
-}
-
-.tarjeta-contenido-neon {
-    position: absolute;
-    top: 18px;
-    width: 200px;
-    background: linear-gradient(135deg, rgba(15, 15, 20, 0.85) 0%, rgba(5, 5, 10, 0.95) 100%);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    /* Subimos el z-index a 2 para que el texto esté siempre por ENCIMA de la línea */
+    z-index: 2; 
+    max-width: 260px;
+    
+    /* TRUCO TÉCNICO: Le damos un fondo del mismo color oscuro que tu página (#050505) 
+       y un margen interno (padding). Esto actúa como un 'borrador' invisible:
+       si la línea pasa por abajo, el fondo negro la tapa limpiamente y no toca las letras.
+    */
+    background-color: #050505 !important; 
+    padding: 10px 15px !important; 
     border-radius: 4px;
-    padding: 12px;
-    pointer-events: none;
-    opacity: 0.6;
-    transform: translateY(5px);
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    
+    border: none !important;
+    box-shadow: none !important;
+    text-align: left !important;
+    transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-.tag-index {
+.seccion-diagrama-locomotive .numero-hito {
     font-family: monospace;
-    font-size: 0.7rem;
-    color: #555;
+    font-size: 0.75rem;
+    color: var(--magenta);
     display: block;
-    margin-bottom: 2px;
-    letter-spacing: 1px;
+    margin-bottom: 4px;
+    font-weight: bold;
 }
 
-.tarjeta-contenido-neon h3 {
-    font-size: 0.9rem;
-    font-weight: bold;
+.seccion-diagrama-locomotive .hito-sistema h3 {
+    font-size: 1.25rem;
+    font-weight: 900;
     color: #ffffff;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
 }
 
-.tarjeta-contenido-neon p {
-    font-size: 0.75rem;
+.seccion-diagrama-locomotive .hito-sistema p {
+    font-size: 0.82rem;
     color: #888;
     line-height: 1.4;
+    transition: color 0.3s ease;
 }
 
-.nodo-parallax:hover .anclaje-glow {
-    transform: scale(1.8);
-    background-color: var(--yellow);
-    box-shadow: 0 0 15px var(--yellow);
+/* Hover de realce */
+.seccion-diagrama-locomotive .hito-sistema:hover {
+    transform: scale(1.04) translateY(-2px);
 }
 
-.nodo-parallax:hover .tarjeta-contenido-neon {
-    opacity: 1;
-    transform: translateY(0);
-    border-color: rgba(0, 170, 255, 0.3);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.5), 0 0 15px rgba(0, 170, 255, 0.1);
+.seccion-diagrama-locomotive .hito-sistema:hover p {
+    color: #ffffff; 
 }
 
+/* Adaptación responsive */
 @media (max-width: 850px) {
-    .seccion-diagrama-locomotive { height: auto; }
-    .lienzo-locomotive-container { height: auto; display: flex; flex-direction: column; gap: 4vh; border: none; background: transparent; }
-    .lineas-constelacion { display: none; }
-    .nodo-parallax { position: relative !important; top: auto !important; left: auto !important; transform: none !important; width: 100%; align-items: flex-start; }
-    .tarjeta-contenido-neon { position: relative !important; top: auto !important; width: 100%; opacity: 1 !important; transform: none !important; }
-    .anclaje-glow { display: none; }
+    .seccion-diagrama-locomotive .contenedor-flujo-lineal { height: auto; display: flex; flex-direction: column; gap: 50px; }
+    .seccion-diagrama-locomotive .svg-flujo-continuo { display: none; }
+    .seccion-diagrama-locomotive .hito-sistema { position: relative !important; top: auto !important; left: auto !important; max-width: 100%; padding: 0 !important; }
 }
