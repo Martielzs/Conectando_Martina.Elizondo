@@ -377,13 +377,49 @@ body {
 ::-webkit-scrollbar-thumb:hover { background-color: var(--cyan); }
 
 /* ==========================================================
-   9. CONTENEDOR PARA EL MODELADO 3D
+   9. CONFIGURACIÓN EN DOS COLUMNAS (TEXTO E INTERACCIÓN 3D)
    ========================================================== */
+
+/* Contenedor padre que divide la pantalla en 2 */
+.bloque-dos-columnas {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    gap: 4vw; /* Espacio intermedio entre texto y render */
+    margin-bottom: 6vh;
+}
+
+/* Columna de los textos (se va a la izquierda) */
+.columna-texto {
+    flex: 1.2; /* Toma un poco más de ancho para que el texto respire */
+    display: flex;
+    flex-direction: column;
+}
+
+.columna-texto .section-text {
+    font-size: clamp(1rem, 1.5vw, 1.35rem); /* Achicamos un pelito el texto para que calce bien al lado del 3D */
+    line-height: 1.6;
+    color: #bbbbbb;
+    margin-bottom: 2.5vh;
+    text-align: left;
+}
+
+/* Columna del render (se va a la derecha) */
+.columna-render {
+    flex: 0.8; /* Espacio controlado para el visor */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Redefinimos el contenedor 3D original para que calce en su columna */
 .contenedor-3d {
     width: 100%;
-    max-width: 600px; 
-    height: 400px;    
-    margin: 4vh auto;
+    max-width: 420px; 
+    height: 340px;    
     display: flex;
     justify-content: center;
     align-items: center;
@@ -398,6 +434,20 @@ model-viewer {
     outline: none;
 }
 
+/* RESPONSIVE: Si entran desde un celular, las columnas se desarman y se apilan verticalmente */
+@media (max-width: 850px) {
+    .bloque-dos-columnas {
+        flex-direction: column;
+        gap: 4vh;
+    }
+    .columna-texto .section-text {
+        text-align: left;
+    }
+    .contenedor-3d {
+        max-width: 340px;
+        height: 280px;
+    }
+}
 /* ==========================================================
    10. MAQUETACIÓN ALINEADA A LA IZQUIERDA (ZONA MECÁNICA)
    ========================================================== */

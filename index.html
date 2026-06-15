@@ -57,29 +57,36 @@
             <span class="section-number">01.</span>
             <h2 class="section-title">¿QUÉ ES<br><span class="magenta-text">CONECTANDO?</span></h2>
         </div>
-        <p class="section-text reveal">Conectando es un juego de construction y exploración en el que los jugadores deben encontrar una salida a través de un sistema que se transforma constantemente.</p>
-        <p class="section-text reveal">Utilizando distintas piezas, el tablero se construye progresivamente, generando recorridos, conexiones y nuevas posibilidades de desplazamiento a medida que avanza la partida.</p>
-        <p class="section-text reveal">Cada decisión modifica la configuración existente, haciendo que el camino hacia la salida cambie continuamente.</p>
-        
-        <div class="contenedor-3d">
-            <model-viewer 
-                id="caja-interactive-3d"
-                src="modelado/modelado_caja3.glb" 
-                alt="Modelo 3D interactivo de la caja de Conectando" 
-                camera-controls 
-                tone-mapping="neutral"
-                shadow-intensity="1"
-                disable-zoom
-                interaction-prompt="none"
-                camera-orbit="0deg 75deg 100%"
-                auto-rotate
-                rotation-per-second="15deg"
-                ar 
-                ar-modes="webxr scene-viewer quick-look">
-                <button slot="ar-button" id="ar-button" style="position: absolute; bottom: 16px; right: 16px; background: #00aaff; border: none; padding: 8px 16px; color: #fff; font-weight: bold; border-radius: 4px; cursor: pointer; z-index: 10;">
-                    Ver en realidad aumentada
-                </button>
-            </model-viewer>
+
+        <div class="bloque-dos-columnas">
+            
+            <div class="columna-texto">
+                <p class="section-text reveal">Conectando es un juego de construcción y exploración en el que los jugadores deben encontrar una salida a través de un sistema que se transforma constantemente.</p>
+                <p class="section-text reveal">Utilizando distintas piezas, el tablero se construye progresivamente, generando recorridos, conexiones y nuevas posibilidades de desplazamiento a medida que avanza la partida.</p>
+                <p class="section-text reveal">Cada decisión modifica la configuración existente, haciendo que el camino hacia la salida cambie continuamente.</p>
+            </div>
+
+            <div class="columna-render">
+                <div class="contenedor-3d">
+                    <model-viewer 
+                        id="caja-interactive-3d"
+                        src="modelado/modelado_caja_4.glb" 
+                        alt="Modelo 3D interactivo de la caja de Conectando" 
+                        camera-controls 
+                        tone-mapping="neutral"
+                        shadow-intensity="1"
+                        disable-zoom
+                        interaction-prompt="none"
+                        camera-orbit="0deg 90deg 135%"
+                        ar 
+                        ar-modes="webxr scene-viewer quick-look">
+                        <button slot="ar-button" id="ar-button" style="position: absolute; bottom: 16px; right: 16px; background: #00aaff; border: none; padding: 8px 16px; color: #fff; font-weight: bold; border-radius: 4px; cursor: pointer; z-index: 10;">
+                            Ver en realidad aumentada
+                        </button>
+                    </model-viewer>
+                </div>
+            </div>
+
         </div>
 
         <div class="galeria-cinta-container reveal">
@@ -184,6 +191,10 @@
                         <p>Distribución de piezas en el tablero central.</p>
                     </div>
                 </div>
+
+            </div>
+        </div>
+    </section>
 
             </div>
         </div>
@@ -307,29 +318,6 @@
             <a href="#" class="btn-massive">INICIAR EXPLORACIÓN</a>
         </div>
     </section>
-
-    <script>
-        const viewer3D = document.querySelector('#caja-interactive-3d');
-        let timerRetornoAuto;
-
-        // Función que apaga la rotación automática al interactuar manualmente
-        function detenerRotacionPorUsuario() {
-            // Apagamos el flag nativo de auto-rotate del componente
-            viewer3D.removeAttribute('auto-rotate');
-            
-            // Limpiamos cualquier contador activo previo
-            clearTimeout(timerRetornoAuto);
-            
-            // Si el usuario deja de tocar el modelo por 6 segundos, se reactiva el giro lento solo
-            timerRetornoAuto = setTimeout(() => {
-                viewer3D.setAttribute('auto-rotate', '');
-            }, 6000);
-        }
-
-        // Escuchamos los eventos de interacción del mouse y pantallas táctiles
-        viewer3D.addEventListener('mousedown', detenerRotacionPorUsuario);
-        viewer3D.addEventListener('touchstart', detenerRotacionPorUsuario, {passive: true});
-    </script>
 
     <script src="script.js"></script>
 </body>
