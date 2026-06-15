@@ -68,22 +68,21 @@
 
             <div class="columna-render">
                 <div class="contenedor-3d">
-                    <model-viewer 
-                        id="caja-interactive-3d"
-                        src="modelado/modelado_caja_4.glb" 
-                        alt="Modelo 3D interactivo de la caja de Conectando" 
-                        camera-controls 
-                        tone-mapping="neutral"
-                        shadow-intensity="1"
-                        disable-zoom
-                        interaction-prompt="none"
-                        camera-orbit="0deg 90deg 135%"
-                        ar 
-                        ar-modes="webxr scene-viewer quick-look">
-                        <button slot="ar-button" id="ar-button" style="position: absolute; bottom: 16px; right: 16px; background: #00aaff; border: none; padding: 8px 16px; color: #fff; font-weight: bold; border-radius: 4px; cursor: pointer; z-index: 10;">
-                            Ver en realidad aumentada
-                        </button>
-                    </model-viewer>
+           <model-viewer 
+                id="caja-interactive-3d"
+                src="modelado/modelado_caja_6.glb" 
+                alt="Modelo 3D interactivo de la caja de Conectando" 
+                camera-controls 
+                tone-mapping="neutral"
+                shadow-intensity="1"
+                disable-zoom
+                interaction-prompt="none" interaction-prompt-style="none" camera-orbit="0deg 90deg 135%"
+                ar 
+                ar-modes="webxr scene-viewer quick-look">
+                <button slot="ar-button" id="ar-button" style="position: absolute; bottom: 16px; right: 16px; background: #00aaff; border: none; padding: 8px 16px; color: #fff; font-weight: bold; border-radius: 4px; cursor: pointer; z-index: 10;">
+                    Ver en realidad aumentada
+                </button>
+            </model-viewer>
                 </div>
             </div>
 
