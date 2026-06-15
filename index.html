@@ -59,7 +59,6 @@
         </div>
 
         <div class="bloque-dos-columnas">
-            
             <div class="columna-texto">
                 <p class="section-text reveal">Conectando es un juego de construcción y exploración en el que los jugadores deben encontrar una salida a través de un sistema que se transforma constantemente.</p>
                 <p class="section-text reveal">Utilizando distintas piezas, el tablero se construye progresivamente, generando recorridos, conexiones y nuevas posibilidades de desplazamiento a medida que avanza la partida.</p>
@@ -68,35 +67,80 @@
 
             <div class="columna-render">
                 <div class="contenedor-3d">
-           <model-viewer 
-                id="caja-interactive-3d"
-                src="modelado/modelado_caja_6.glb" 
-                alt="Modelo 3D interactivo de la caja de Conectando" 
-                camera-controls 
-                tone-mapping="neutral"
-                shadow-intensity="1"
-                disable-zoom
-                interaction-prompt="none" interaction-prompt-style="none" camera-orbit="0deg 90deg 135%"
-                ar 
-                ar-modes="webxr scene-viewer quick-look">
-                <button slot="ar-button" id="ar-button" style="position: absolute; bottom: 16px; right: 16px; background: #00aaff; border: none; padding: 8px 16px; color: #fff; font-weight: bold; border-radius: 4px; cursor: pointer; z-index: 10;">
-                    Ver en realidad aumentada
-                </button>
-            </model-viewer>
+                    <model-viewer 
+                        id="caja-interactive-3d"
+                        src="modelado/modelado_caja_6.glb" 
+                        alt="Modelo 3D interactivo de la caja de Conectando" 
+                        camera-controls 
+                        tone-mapping="neutral"
+                        shadow-intensity="1"
+                        disable-zoom
+                        interaction-prompt="none" 
+                        interaction-prompt-style="none" 
+                        camera-orbit="0deg 90deg 135%"
+                        ar 
+                        ar-modes="webxr scene-viewer quick-look">
+                        <button slot="ar-button" id="ar-button" style="position: absolute; bottom: 16px; right: 16px; background: #00aaff; border: none; padding: 8px 16px; color: #fff; font-weight: bold; border-radius: 4px; cursor: pointer; z-index: 10;">
+                            Ver en realidad aumentada
+                        </button>
+                    </model-viewer>
                 </div>
             </div>
-
         </div>
 
         <div class="galeria-cinta-container reveal">
             <div class="cinta-movimiento-infinito">
-                
                 <div class="tarjeta-cinta">
                     <div class="marco-neon-glass">
                         <img src="imagenes/imagen_contenedor_1.png" alt="Caja Conectando">
                     </div>
                     <div class="info-pie-cinta">
                         <h3>01 // EL CONTENEDOR</h3>
+                    </div>
+                </div>
+
+                <div class="tarjeta-cinta">
+                    <div class="marco-neon-glass">
+                        <img src="imagenes/imagen_contenido_2.png" alt="Fichas de Interacción">
+                    </div>
+                    <div class="info-pie-cinta">
+                        <h3>02 // CONTENIDO DEL JUEGO</h3>
+                    </div>
+                </div>
+
+                <div class="tarjeta-cinta">
+                    <div class="marco-neon-glass">
+                        <img src="imagenes/imagen_abierto_3.png" alt="Tablero de Juego">
+                    </div>
+                    <div class="info-pie-cinta">
+                        <h3>03 // CONTENIDO DESPLEGADO</h3>
+                    </div>
+                </div>
+
+                <div class="tarjeta-cinta">
+                    <div class="marco-neon-glass">
+                        <img src="imagenes/imagen_tablero_4.png" alt="Fichas de Interacción">
+                    </div>
+                    <div class="info-pie-cinta">
+                        <h3>04 // TABLERO</h3>
+                    </div>
+                </div>
+
+                <div class="tarjeta-cinta">
+                    <div class="marco-neon-glass">
+                        <img src="imagenes/imagen_partida_5.png" alt="Tablero de Juego">
+                    </div>
+                    <div class="info-pie-cinta">
+                        <h3>05 // PARTIDA</h3>
+                    </div>
+                </div>
+
+                <div class="tarjeta-cinta">
+                    <div class="marco-neon-glass">
+                        <img src="imagenes/imagen_contenedor_1.png" alt="Caja Conectando">
+                    </div>
+                    <div class="info-pie-cinta">
+                        <h3>EL CONTENEDOR</h3>
                         <p>Caja del juego y empaque estructural.</p>
                     </div>
                 </div>
@@ -106,7 +150,7 @@
                         <img src="imagenes/imagen_contenido_2.png" alt="Fichas de Interacción">
                     </div>
                     <div class="info-pie-cinta">
-                        <h3>02 // LAS PIEZAS</h3>
+                        <h3>LAS PIEZAS</h3>
                         <p>Unidades independientes de trayectoria.</p>
                     </div>
                 </div>
@@ -116,7 +160,7 @@
                         <img src="imagenes/imagen_abierto_3.png" alt="Tablero de Juego">
                     </div>
                     <div class="info-pie-cinta">
-                        <h3>03 // EL SISTEMA</h3>
+                        <h3>EL SISTEMA</h3>
                         <p>Distribución de piezas en el tablero central.</p>
                     </div>
                 </div>
@@ -126,7 +170,7 @@
                         <img src="imagenes/imagen_tablero_4.png" alt="Fichas de Interacción">
                     </div>
                     <div class="info-pie-cinta">
-                        <h3>04 // LAS TRAYECTORIAS</h3>
+                        <h3>LAS TRAYECTORIAS</h3>
                         <p>Unidades independientes de trayectoria.</p>
                     </div>
                 </div>
@@ -136,65 +180,10 @@
                         <img src="imagenes/imagen_partida_5.png" alt="Tablero de Juego">
                     </div>
                     <div class="info-pie-cinta">
-                        <h3>05 // LA CONFIGURACIÓN</h3>
+                        <h3>LA CONFIGURACIÓN</h3>
                         <p>Distribución de piezas en el tablero central.</p>
                     </div>
                 </div>
-
-                <div class="tarjeta-cinta">
-                    <div class="marco-neon-glass">
-                        <img src="imagenes/imagen_contenedor_1.png" alt="Caja Conectando">
-                    </div>
-                    <div class="info-pie-cinta">
-                        <h3>01 // EL CONTENEDOR</h3>
-                        <p>Caja del juego y empaque estructural.</p>
-                    </div>
-                </div>
-
-                <div class="tarjeta-cinta">
-                    <div class="marco-neon-glass">
-                        <img src="imagenes/imagen_contenido_2.png" alt="Fichas de Interacción">
-                    </div>
-                    <div class="info-pie-cinta">
-                        <h3>02 // LAS PIEZAS</h3>
-                        <p>Unidades independientes de trayectoria.</p>
-                    </div>
-                </div>
-
-                <div class="tarjeta-cinta">
-                    <div class="marco-neon-glass">
-                        <img src="imagenes/imagen_abierto_3.png" alt="Tablero de Juego">
-                    </div>
-                    <div class="info-pie-cinta">
-                        <h3>03 // EL SISTEMA</h3>
-                        <p>Distribución de piezas en el tablero central.</p>
-                    </div>
-                </div>
-
-                <div class="tarjeta-cinta">
-                    <div class="marco-neon-glass">
-                        <img src="imagenes/imagen_tablero_4.png" alt="Fichas de Interacción">
-                    </div>
-                    <div class="info-pie-cinta">
-                        <h3>04 // LAS TRAYECTORIAS</h3>
-                        <p>Unidades independientes de trayectoria.</p>
-                    </div>
-                </div>
-
-                <div class="tarjeta-cinta">
-                    <div class="marco-neon-glass">
-                        <img src="imagenes/imagen_partida_5.png" alt="Tablero de Juego">
-                    </div>
-                    <div class="info-pie-cinta">
-                        <h3>05 // LA CONFIGURACIÓN</h3>
-                        <p>Distribución de piezas en el tablero central.</p>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
             </div>
         </div>
     </section>
@@ -259,9 +248,9 @@
             <span class="section-number">04.</span>
             <h2 class="section-title" style="font-size: clamp(2rem, 4.5vw, 5rem);">MÁS ALLÁ<br>DEL <span class="yellow-text">JUEGO</span></h2>
         </div>
-        <p class="section-text reveal">Durante el desarrollo de Conectando surgió una observación que fue más allá de la mecánica del juego.</p>
-        <p class="section-text reveal">Al observar cómo las piezas interactuaban entre sí, apareció un interés por comprender cómo elementos independientes son capaces de generar estructuras más complejas cuando establecen relaciones.</p>
-        <p class="section-text reveal">Esta observación dio origen a una exploración digital basada en los fenómenos observados durante la construcción del sistema.</p>
+        <p class="section-text reveal">Más allá de encontrar una salida, el juego permitió observar cómo elementos independientes pueden formar estructuras complejas cuando establecen relaciones entre sí.</p>
+        <p class="section-text reveal">Durante cada recorrido, las piezas se conectan de distintas maneras, generando caminos y posibilidades que cambian constantemente.</p>
+        <p class="section-text reveal">Esta dinámica hizo visible la importancia de las conexiones y cómo la interacción entre elementos simples puede dar lugar a configuraciones más amplias y diversas.</p>
     </section>
 
     <section id="conceptos" class="section scroll-section">
@@ -301,22 +290,122 @@
     <section id="exploracion" class="section scroll-section">
         <div class="section-header reveal">
             <span class="section-number">06.</span>
-            <h2 class="section-title">LA <span class="magenta-text">EXPLORACIÓN</span></h2>
+            <h2 class="section-title"><span class="magenta-text">FUNDAMENTO</span></h2>
         </div>
-        <p class="section-text reveal">La experiencia digital que se presenta a continuación no busca explicar el juego, sino explorar visualmente los fenómenos observados en él.</p>
-        <p class="section-text reveal">A través del movimiento, las conexiones y la transformación de las estructuras, la exploración propone una nueva forma de observar las relaciones que dan origen al sistema.</p>
+        <p class="section-text reveal">La propuesta surge de observar cómo pequeñas decisiones generan múltiples posibilidades dentro de una red de relaciones.</p>
+        <p class="section-text reveal">Durante el juego, cada elección modifica el recorrido y condiciona las conexiones que pueden establecerse posteriormente, dando lugar a distintas configuraciones y resultados. A medida que las piezas se relacionan entre sí, se construye un sistema dinámico en el que cada elemento influye en el conjunto.</p>
     </section>
 
-    <section id="cierre" class="section scroll-section" style="min-height: 80vh; justify-content: center; align-items: center; text-align: center;">
-        <span class="section-number reveal">07. CIERRE</span>
-        <h2 class="section-title reveal" style="max-width: 100%; font-size: clamp(3rem, 7vw, 7rem); margin-bottom: 1vh;">
+    <section class="seccion-diagrama-locomotive">
+        <div class="section-header reveal">
+            <span class="section-number">07. MAPA CONCEPTUAL</span>
+            <h2 class="section-title">El Sistema <span class="magenta-text">en Relaciones</span></h2>
+        </div>
+
+        <div class="lienzo-locomotive-container">
+            <svg class="lineas-constelacion" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
+                <path class="trazo-neon tn-1" d="M 150 300 Q 300 150, 450 350" />
+                <path class="trazo-neon tn-2" d="M 450 350 Q 550 100, 700 200" />
+                <path class="trazo-neon tn-3" d="M 450 350 Q 520 480, 650 420" />
+                <path class="trazo-neon tn-4" d="M 700 200 Q 800 220, 880 300" />
+                <path class="trazo-neon tn-5" d="M 650 420 Q 780 380, 880 300" />
+                <path class="trazo-neon tn-cruzada" d="M 150 300 Q 500 80, 880 300" />
+            </svg>
+
+            <div class="nodo-parallax" data-scroll-speed="1.5" style="top: 50%; left: 15%;">
+                <div class="anclaje-glow"><span class="onda-expansion"></span></div>
+                <div class="tarjeta-contenido-neon">
+                    <span class="tag-index">// 01</span>
+                    <h3>Conexión</h3>
+                    <p>Encuentro inicial entre unidades independientes.</p>
+                </div>
+            </div>
+
+            <div class="nodo-parallax" data-scroll-speed="2.8" style="top: 58%; left: 45%;">
+                <div class="anclaje-glow"><span class="onda-expansion"></span></div>
+                <div class="tarjeta-contenido-neon">
+                    <span class="tag-index">// 02</span>
+                    <h3>Relación</h3>
+                    <p>Vínculo estructural que altera las propiedades.</p>
+                </div>
+            </div>
+
+            <div class="nodo-parallax" data-scroll-speed="1.2" style="top: 30%; left: 70%;">
+                <div class="anclaje-glow"><span class="onda-expansion"></span></div>
+                <div class="tarjeta-contenido-neon">
+                    <span class="tag-index">// 03</span>
+                    <h3>Trayectoria</h3>
+                    <p>Vector de movimiento generado por las piezas.</p>
+                </div>
+            </div>
+
+            <div class="nodo-parallax" data-scroll-speed="3.2" style="top: 70%; left: 65%;">
+                <div class="anclaje-glow"><span class="onda-expansion"></span></div>
+                <div class="tarjeta-contenido-neon">
+                    <span class="tag-index">// 04</span>
+                    <h3>Exploración</h3>
+                    <p>Reconocimiento interactivo de los recorridos.</p>
+                </div>
+            </div>
+
+            <div class="nodo-parallax" data-scroll-speed="2.0" style="top: 50%; left: 88%;">
+                <div class="anclaje-glow nodo-sistema-core"><span class="onda-expansion"></span></div>
+                <div class="tarjeta-contenido-neon">
+                    <span class="tag-index" style="color: var(--magenta);">// 05</span>
+                    <h3 style="color: var(--magenta); text-shadow: 0 0 10px rgba(255,0,127,0.4);">Sistema</h3>
+                    <p>La estructura emergente que unifica el todo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+  <section id="cierre" class="section scroll-section" style="min-height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+        <span class="section-number reveal">08. CIERRE</span>
+        <h2 class="section-title reveal" style="max-width: 100%; font-size: clamp(3rem, 7vw, 7rem); margin-bottom: 4vh;">
             Las relaciones<br>construyen <span class="cyan">significado.</span>
         </h2>
         
-        <div class="reveal">
-            <a href="#" class="btn-massive">INICIAR EXPLORACIÓN</a>
-        </div>
+       <a href="exploracion.html" class="btn-massive">INICIAR EXPLORACIÓN</a>.
     </section>
+
+    <script>
+        const nodosParallax = document.querySelectorAll('.nodo-parallax');
+        let scrollActual = window.pageYOffset;
+        let scrollInercial = scrollActual;
+        const factorSuavizado = 0.07; // Controla la elasticidad del movimiento
+
+        function actualizarInerciaParallax() {
+            scrollActual = window.pageYOffset;
+            
+            // Suavizado matemático de la velocidad de scroll
+            scrollInercial += (scrollActual - scrollInercial) * factorSuavizado;
+
+            nodosParallax.forEach(nodo => {
+                const velocidad = parseFloat(nodo.getAttribute('data-scroll-speed')) || 1;
+                
+                // Calculamos el desplazamiento respecto a la posición original de la sección
+                const seccion = document.querySelector('.seccion-diagrama-locomotive');
+                const seccionTop = seccion.offsetTop;
+                
+                // Solo calcula la inercia si el usuario está cerca o scrolleando la zona del mapa
+                const desfaseEje = (scrollInercial - seccionTop) * 0.12 * velocidad;
+                
+                // ¡AQUÍ ESTÁ EL TRUCO!: Forzamos el -50% del centrado de CSS y le sumamos el movimiento líquido
+                nodo.style.transform = `translate(-50%, calc(-50% - ${desfaseEje}px))`;
+            });
+
+            requestAnimationFrame(actualizarInerciaParallax);
+        }
+
+        // Ejecuta la animación cuadro por cuadro de forma nativa
+        window.addEventListener('scroll', () => {
+            // Mantiene el tracking del scroll activo
+        });
+
+        window.addEventListener('load', () => {
+            requestAnimationFrame(actualizarInerciaParallax);
+        });
+    </script>
 
     <script src="script.js"></script>
 </body>
