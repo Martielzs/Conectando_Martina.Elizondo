@@ -1,30 +1,47 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Conectando - Juego de Construcción y Transformación</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
 </head>
 <body>
 
+    <!-- PRELOADER CON ESTÉTICA DE EXPLORACIÓN -->
+    <div id="preloader">
+        <div class="preloader-content">
+            <div class="preloader-animation">
+                <div class="loader-central-node"></div>
+                <div class="loader-node loader-node-1"></div>
+                <div class="loader-node loader-node-2"></div>
+                <div class="loader-node loader-node-3"></div>
+            </div>
+            <div class="preloader-text">// inicializando sistema de exploración //</div>
+        </div>
+    </div>
+
+    <!-- Fondo de cuadraditos petit con scroll (Paralaje) -->
+    <div id="fondo-cuadrados-scroll"></div>
+
     <nav class="franja-nav" id="main-nav">
         <ul class="nav-list">
-            <li><a href="#que-es" class="nav-link">Qué es</a></li>
-            <li><a href="#mecanica" class="nav-link">Mecánica</a></li>
-            <li><a href="#mas-alla" class="nav-link">Más Allá</a></li>
-            <li><a href="#conceptos" class="nav-link">Conceptos</a></li>
-            <li><a href="#exploracion" class="nav-link">Fundamento</a></li>
-             <li><a href="#exploracion" class="nav-link">Sistema</a></li>
-              <li><a href="#exploracion" class="nav-link">Exploración</a></li>
+            <li><a href="#que-es" class="nav-link"><span class="nav-text">Qué es</span></a></li>
+            <li><a href="#mecanica" class="nav-link"><span class="nav-text">Mecánica</span></a></li>
+            <li><a href="#del-juego-al-sistema" class="nav-link"><span class="nav-text">Transición</span></a></li>
+            <li><a href="#fundamento" class="nav-link"><span class="nav-text">Fundamento</span></a></li>
+            <li><a href="#mapa-relaciones" class="nav-link"><span class="nav-text">Conceptos</span></a></li>
         </ul>
     </nav>
 
-    <div class="bg-pieces-container" id="enjambre-piezas"></div>
-
+    <!-- HERO SECTION (Estilo Arcturis con anti-títulos y botones de acción) -->
     <header class="hero" id="slide-hero">
-        <div class="hero-left">
+        <div class="hero-left" style="position: relative; z-index: 2;">
+            <span class="preheading reveal">// CONEXIÓN • EVOLUCIÓN • TRAYECTORIA</span>
             <div class="mega-title">
                 <div class="title-row row-1">
                     <span class="text-con">CON</span>
@@ -35,15 +52,53 @@
                     <span class="text-do">DO<span class="text-dot">.</span></span>
                 </div>
             </div>
-            
-            <div class="magenta-box">
-                <p>Un juego de mesa donde el camino no está dado,<br>sino que aparece mientras se construye.</p>
+           
+            <div class="hero-description-clean">
+                <p>Un juego donde cada decisión transforma el recorrido y genera nuevas posibilidades de conexión.</p>
             </div>
         </div>
 
         <div class="hero-right">
-            <hr class="white-line">
-            <p>Entre inicio y meta, el espacio<br>no existe todavía... se forma<br>con cada decisión.</p>
+            <div class="contenedor-3d-hero">
+                <!-- Canvas de cuadritos y conexiones (Estilo Exploración) -->
+                <canvas id="hero-canvas"></canvas>
+                
+                <!-- Floating 3D pieces -->
+                <div class="floating-pieces-container">
+                    <!-- Pieza T (Cyan) -->
+                    <div class="floating-piece piece-t-3d">
+                        <svg viewBox="0 0 120 120" class="floating-piece-layer"><path d="M 20 20 H 100 V 50 H 75 V 100 H 45 V 50 H 20 Z" fill="none" stroke="var(--cyan)" stroke-width="4.5" stroke-linejoin="round" style="filter: drop-shadow(0 0 8px rgba(0,170,255,0.45));"/></svg>
+                        <svg viewBox="0 0 120 120" class="floating-piece-layer"><path d="M 20 20 H 100 V 50 H 75 V 100 H 45 V 50 H 20 Z" fill="none" stroke="var(--cyan)" stroke-width="4.5" stroke-linejoin="round" style="filter: drop-shadow(0 0 8px rgba(0,170,255,0.45));"/></svg>
+                        <svg viewBox="0 0 120 120" class="floating-piece-layer"><path d="M 20 20 H 100 V 50 H 75 V 100 H 45 V 50 H 20 Z" fill="none" stroke="var(--cyan)" stroke-width="4.5" stroke-linejoin="round" style="filter: drop-shadow(0 0 8px rgba(0,170,255,0.45));"/></svg>
+                        <svg viewBox="0 0 120 120" class="floating-piece-layer"><path d="M 20 20 H 100 V 50 H 75 V 100 H 45 V 50 H 20 Z" fill="none" stroke="var(--cyan)" stroke-width="4.5" stroke-linejoin="round" style="filter: drop-shadow(0 0 8px rgba(0,170,255,0.45));"/></svg>
+                        <svg viewBox="0 0 120 120" class="floating-piece-layer"><path d="M 20 20 H 100 V 50 H 75 V 100 H 45 V 50 H 20 Z" fill="none" stroke="var(--cyan)" stroke-width="4.5" stroke-linejoin="round" style="filter: drop-shadow(0 0 8px rgba(0,170,255,0.45));"/></svg>
+                    </div>
+                    <!-- Pieza L Grande (Magenta) -->
+                    <div class="floating-piece piece-l-g-3d">
+                        <svg viewBox="0 0 120 120" class="floating-piece-layer"><path d="M 15 15 H 45 V 75 H 105 V 105 H 15 Z" fill="none" stroke="var(--magenta)" stroke-width="4.5" stroke-linejoin="round" style="filter: drop-shadow(0 0 8px rgba(255,0,127,0.45));"/></svg>
+                        <svg viewBox="0 0 120 120" class="floating-piece-layer"><path d="M 15 15 H 45 V 75 H 105 V 105 H 15 Z" fill="none" stroke="var(--magenta)" stroke-width="4.5" stroke-linejoin="round" style="filter: drop-shadow(0 0 8px rgba(255,0,127,0.45));"/></svg>
+                        <svg viewBox="0 0 120 120" class="floating-piece-layer"><path d="M 15 15 H 45 V 75 H 105 V 105 H 15 Z" fill="none" stroke="var(--magenta)" stroke-width="4.5" stroke-linejoin="round" style="filter: drop-shadow(0 0 8px rgba(255,0,127,0.45));"/></svg>
+                        <svg viewBox="0 0 120 120" class="floating-piece-layer"><path d="M 15 15 H 45 V 75 H 105 V 105 H 15 Z" fill="none" stroke="var(--magenta)" stroke-width="4.5" stroke-linejoin="round" style="filter: drop-shadow(0 0 8px rgba(255,0,127,0.45));"/></svg>
+                        <svg viewBox="0 0 120 120" class="floating-piece-layer"><path d="M 15 15 H 45 V 75 H 105 V 105 H 15 Z" fill="none" stroke="var(--magenta)" stroke-width="4.5" stroke-linejoin="round" style="filter: drop-shadow(0 0 8px rgba(255,0,127,0.45));"/></svg>
+                    </div>
+                    <!-- Pieza Recta Chica (Yellow) -->
+                    <div class="floating-piece piece-recta-c-3d">
+                        <svg viewBox="0 0 120 120" class="floating-piece-layer"><rect x="30" y="45" width="60" height="30" fill="none" stroke="var(--yellow)" stroke-width="4.5" rx="2" style="filter: drop-shadow(0 0 8px rgba(230,255,0,0.45));"/></svg>
+                        <svg viewBox="0 0 120 120" class="floating-piece-layer"><rect x="30" y="45" width="60" height="30" fill="none" stroke="var(--yellow)" stroke-width="4.5" rx="2" style="filter: drop-shadow(0 0 8px rgba(230,255,0,0.45));"/></svg>
+                        <svg viewBox="0 0 120 120" class="floating-piece-layer"><rect x="30" y="45" width="60" height="30" fill="none" stroke="var(--yellow)" stroke-width="4.5" rx="2" style="filter: drop-shadow(0 0 8px rgba(230,255,0,0.45));"/></svg>
+                        <svg viewBox="0 0 120 120" class="floating-piece-layer"><rect x="30" y="45" width="60" height="30" fill="none" stroke="var(--yellow)" stroke-width="4.5" rx="2" style="filter: drop-shadow(0 0 8px rgba(230,255,0,0.45));"/></svg>
+                        <svg viewBox="0 0 120 120" class="floating-piece-layer"><rect x="30" y="45" width="60" height="30" fill="none" stroke="var(--yellow)" stroke-width="4.5" rx="2" style="filter: drop-shadow(0 0 8px rgba(230,255,0,0.45));"/></svg>
+                    </div>
+                    <!-- Pieza L Chica (Yellow) -->
+                    <div class="floating-piece piece-l-c-3d">
+                        <svg viewBox="0 0 120 120" class="floating-piece-layer"><path d="M 30 30 H 60 V 60 H 90 V 90 H 30 Z" fill="none" stroke="var(--yellow)" stroke-width="4.5" stroke-linejoin="round" style="filter: drop-shadow(0 0 8px rgba(230,255,0,0.45));"/></svg>
+                        <svg viewBox="0 0 120 120" class="floating-piece-layer"><path d="M 30 30 H 60 V 60 H 90 V 90 H 30 Z" fill="none" stroke="var(--yellow)" stroke-width="4.5" stroke-linejoin="round" style="filter: drop-shadow(0 0 8px rgba(230,255,0,0.45));"/></svg>
+                        <svg viewBox="0 0 120 120" class="floating-piece-layer"><path d="M 30 30 H 60 V 60 H 90 V 90 H 30 Z" fill="none" stroke="var(--yellow)" stroke-width="4.5" stroke-linejoin="round" style="filter: drop-shadow(0 0 8px rgba(230,255,0,0.45));"/></svg>
+                        <svg viewBox="0 0 120 120" class="floating-piece-layer"><path d="M 30 30 H 60 V 60 H 90 V 90 H 30 Z" fill="none" stroke="var(--yellow)" stroke-width="4.5" stroke-linejoin="round" style="filter: drop-shadow(0 0 8px rgba(230,255,0,0.45));"/></svg>
+                        <svg viewBox="0 0 120 120" class="floating-piece-layer"><path d="M 30 30 H 60 V 60 H 90 V 90 H 30 Z" fill="none" stroke="var(--yellow)" stroke-width="4.5" stroke-linejoin="round" style="filter: drop-shadow(0 0 8px rgba(230,255,0,0.45));"/></svg>
+                    </div>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -54,9 +109,10 @@
         </div>
     </div>
 
+    <!-- SECCIÓN 01: ¿QUÉ ES CONECTANDO? -->
     <section id="que-es" class="section scroll-section">
         <div class="section-header reveal">
-            <span class="section-number">01.</span>
+            <span class="preheading">// 01 • EL PROYECTO ORIGINAL</span>
             <h2 class="section-title">¿QUÉ ES<br><span class="magenta-text">CONECTANDO?</span></h2>
         </div>
 
@@ -67,20 +123,20 @@
                 <p class="section-text reveal">Cada decisión modifica la configuración existente, haciendo que el camino hacia la salida cambie continuamente.</p>
             </div>
 
-            <div class="columna-render">
+            <div class="columna-render reveal">
                 <div class="contenedor-3d">
-                    <model-viewer 
+                    <model-viewer
                         id="caja-interactive-3d"
-                        src="modelado/modelado_caja_6.glb" 
-                        alt="Modelo 3D interactivo de la caja de Conectando" 
-                        camera-controls 
+                        src="modelado/modelado_caja_6.glb"
+                        alt="Modelo 3D interactivo de la caja de Conectando"
+                        camera-controls
                         tone-mapping="neutral"
                         shadow-intensity="1"
                         disable-zoom
-                        interaction-prompt="none" 
-                        interaction-prompt-style="none" 
-                        camera-orbit="0deg 90deg 135%"
-                        ar 
+                        interaction-prompt="none"
+                        interaction-prompt-style="none"
+                        camera-orbit="0deg 90deg 100%" 
+                        ar
                         ar-modes="webxr scene-viewer quick-look">
                         <button slot="ar-button" id="ar-button" style="position: absolute; bottom: 16px; right: 16px; background: #00aaff; border: none; padding: 8px 16px; color: #fff; font-weight: bold; border-radius: 4px; cursor: pointer; z-index: 10;">
                             Ver en realidad aumentada
@@ -90,113 +146,117 @@
             </div>
         </div>
 
-        <div class="galeria-cinta-container reveal">
-            <div class="cinta-movimiento-infinito">
-                <div class="tarjeta-cinta">
-                    <div class="marco-neon-glass">
-                        <img src="imagenes/imagen_contenedor_1.png" alt="Caja Conectando">
-                    </div>
-                    <div class="info-pie-cinta">
-                        <h3>01 // EL CONTENEDOR</h3>
-                    </div>
+        <div class="galeria-slider-container reveal">
+            <div class="galeria-header-interface">
+                <span class="galeria-tag">// REGISTRO VISUAL</span>
+                <div class="galeria-controls">
+                    <button id="btn-prev" class="btn-flecha" aria-label="Anterior">←</button>
+                    <button id="btn-next" class="btn-flecha" aria-label="Siguiente">→</button>
                 </div>
+            </div>
 
-                <div class="tarjeta-cinta">
-                    <div class="marco-neon-glass">
-                        <img src="imagenes/imagen_contenido_2.png" alt="Fichas de Interacción">
+            <div class="galeria-viewport">
+                <div class="galeria-track" id="galeria-track">
+                    <div class="item-slider">
+                        <div class="marco-foto">
+                            <img src="imagenes/imagen_contenedor_1.png" alt="Caja Conectando">
+                        </div>
+                        <div class="caption-galeria">01 // EL CONTENEDOR</div>
                     </div>
-                    <div class="info-pie-cinta">
-                        <h3>02 // CONTENIDO DEL JUEGO</h3>
+                    <div class="item-slider">
+                        <div class="marco-foto">
+                            <img src="imagenes/imagen_contenido_2.png" alt="Fichas de Interacción">
+                        </div>
+                        <div class="caption-galeria">02 // CONTENIDO</div>
                     </div>
-                </div>
-
-                <div class="tarjeta-cinta">
-                    <div class="marco-neon-glass">
-                        <img src="imagenes/imagen_abierto_3.png" alt="Tablero de Juego">
+                    <div class="item-slider">
+                        <div class="marco-foto">
+                            <img src="imagenes/imagen_abierto_3.png" alt="Tablero de Juego">
+                        </div>
+                        <div class="caption-galeria">03 // DESPLIEGUE</div>
                     </div>
-                    <div class="info-pie-cinta">
-                        <h3>03 // CONTENIDO DESPLEGADO</h3>
+                    <div class="item-slider">
+                        <div class="marco-foto">
+                            <img src="imagenes/imagen_tablero_4.png" alt="Fichas de Interacción">
+                        </div>
+                        <div class="caption-galeria">04 // TABLERO</div>
                     </div>
-                </div>
-
-                <div class="tarjeta-cinta">
-                    <div class="marco-neon-glass">
-                        <img src="imagenes/imagen_tablero_4.png" alt="Fichas de Interacción">
-                    </div>
-                    <div class="info-pie-cinta">
-                        <h3>04 // TABLERO</h3>
-                    </div>
-                </div>
-
-                <div class="tarjeta-cinta">
-                    <div class="marco-neon-glass">
-                        <img src="imagenes/imagen_partida_5.png" alt="Tablero de Juego">
-                    </div>
-                    <div class="info-pie-cinta">
-                        <h3>05 // PARTIDA</h3>
-                    </div>
-                </div>
-
-                <div class="tarjeta-cinta">
-                    <div class="marco-neon-glass">
-                        <img src="imagenes/imagen_contenedor_1.png" alt="Caja Conectando">
-                    </div>
-                    <div class="info-pie-cinta">
-                        <h3>EL CONTENEDOR</h3>
-                        <p>Caja del juego y empaque estructural.</p>
-                    </div>
-                </div>
-
-                <div class="tarjeta-cinta">
-                    <div class="marco-neon-glass">
-                        <img src="imagenes/imagen_contenido_2.png" alt="Fichas de Interacción">
-                    </div>
-                    <div class="info-pie-cinta">
-                        <h3>LAS PIEZAS</h3>
-                        <p>Unidades independientes de trayectoria.</p>
-                    </div>
-                </div>
-
-                <div class="tarjeta-cinta">
-                    <div class="marco-neon-glass">
-                        <img src="imagenes/imagen_abierto_3.png" alt="Tablero de Juego">
-                    </div>
-                    <div class="info-pie-cinta">
-                        <h3>EL SISTEMA</h3>
-                        <p>Distribución de piezas en el tablero central.</p>
-                    </div>
-                </div>
-
-                <div class="tarjeta-cinta">
-                    <div class="marco-neon-glass">
-                        <img src="imagenes/imagen_tablero_4.png" alt="Fichas de Interacción">
-                    </div>
-                    <div class="info-pie-cinta">
-                        <h3>LAS TRAYECTORIAS</h3>
-                        <p>Unidades independientes de trayectoria.</p>
-                    </div>
-                </div>
-
-                <div class="tarjeta-cinta">
-                    <div class="marco-neon-glass">
-                        <img src="imagenes/imagen_partida_5.png" alt="Tablero de Juego">
-                    </div>
-                    <div class="info-pie-cinta">
-                        <h3>LA CONFIGURACIÓN</h3>
-                        <p>Distribución de piezas en el tablero central.</p>
+                    <div class="item-slider">
+                        <div class="marco-foto">
+                            <img src="imagenes/imagen_partida_5.png" alt="Tablero de Juego">
+                        </div>
+                        <div class="caption-galeria">05 // CONFIGURACIÓN</div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- SECCIÓN: COMPONENTES DEL JUEGO -->
+    <section id="componentes" class="section">
+        <div class="section-header reveal">
+            <span class="preheading">// 02 • ELEMENTOS FÍSICOS</span>
+            <h2 class="section-title">COMPONENTES<br><span class="magenta-text">DEL JUEGO</span></h2>
+        </div>
+
+        <div class="bloque-dos-columnas">
+            <div class="columna-texto">
+                <p class="section-text reveal">El sistema está conformado por un conjunto de piezas físicas de construcción, diseñadas para encajar y estructurar recorridos sobre el tablero.</p>
+                <p class="section-text reveal">A la derecha, se presentan algunos de los componentes en suspensión y un registro audiovisual del despliegue del juego en tiempo real.</p>
+                
+                <div class="contenedor-video reveal" style="margin-top: 30px; width: 100%;">
+                    <video id="video-componentes" controls poster="imagenes/imagen_contenedor_1.png" style="width: 100%; border: 1px solid rgba(255, 255, 255, 0.08); background-color: #000; aspect-ratio: 16/9; display: block; border-radius: 2px;">
+                        <source src="modelado/video_demo.mp4" type="video/mp4">
+                        Tu navegador no soporta la reproducción de video.
+                    </video>
+                </div>
+            </div>
+
+            <div class="columna-render reveal">
+                <!-- Visor Interactivo (Showroom) de Componentes -->
+                <div class="showroom-wrapper">
+                    <!-- Pestañas -->
+                    <div class="showroom-tabs">
+                        <button class="showroom-tab active" data-category="caminos">Piezas</button>
+                        <button class="showroom-tab" data-category="comodines">Comodines</button>
+                        <button class="showroom-tab" data-category="cartas">Cartas</button>
+                    </div>
+                    
+                    <!-- Visor Principal -->
+                    <div class="showroom-visor">
+                        <div class="visor-display-box" id="showroom-visor-box">
+                            <div class="visor-render-container" id="showroom-render-container">
+                                <!-- Render dinámico -->
+                            </div>
+                        </div>
+                        
+                        <div class="visor-details">
+                            <h3 class="visor-title" id="showroom-title">Cargando...</h3>
+                            <div class="visor-meta" id="showroom-meta">-</div>
+                            <p class="visor-description" id="showroom-description">-</p>
+                            <div class="visor-actions" id="showroom-actions" style="display: none;">
+                                <button class="btn-outline btn-visor-action" id="showroom-btn-action">Voltear Carta</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Miniaturas -->
+                    <div class="showroom-thumbnails" id="showroom-thumbnails">
+                        <!-- Miniaturas dinámicas -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 03: MECÁNICA (Diagrama Animado Original) -->
     <section id="mecanica" class="section scroll-section seccion-mecanica-vertical">
         <div class="section-header reveal">
-            <span class="section-number">03. MECÁNICA DEL JUEGO</span>
+            <span class="section-number">02. MECÁNICA DEL JUEGO</span>
             <h2 class="section-title">Construir<br>para <span class="cyan">avanzar</span></h2>
         </div>
         <p class="section-text text-mecanica-ancho reveal">La partida comienza desde un punto central del tablero hacia las metas ubicadas en las esquinas. Si al completar una trayectoria los equipos descubren que la salida elegida no es la correcta, las estructuras construidas se mantienen: el juego exige transformar el sistema y generar una nueva ramificación continuando desde el camino previo para alcanzar el objetivo válido.</p>
-        
+       
         <div class="diagramas-comparativa">
             <div class="columna-diagrama reveal">
                 <p class="subtitulo-diagrama-comp">● Configuración A: Trayectoria Inicial</p>
@@ -210,9 +270,9 @@
 
                         <path class="path-bucle-cyan-A" d="M 280 230 L 200 230 L 200 280 L 120 280 L 120 340 L 250 340 L 250 390 L 80 390" fill="none" stroke="#00aaff" stroke-width="3.5" stroke-linejoin="round" />
                         <path class="path-bucle-magenta-A" d="M 280 230 L 340 230 L 340 160 L 410 160 L 410 210 L 520 210 L 520 390" fill="none" stroke="#ff007f" stroke-width="3.5" stroke-dasharray="8,8" stroke-linejoin="round" />
-                        <circle cx="280" cy="230" r="9" fill="#e6ff00" /> 
-                        <circle cx="80" cy="390" r="9" fill="#ffffff" />  
-                        <circle cx="520" cy="390" r="9" fill="#ffffff" /> 
+                        <rect x="271" y="221" width="18" height="18" fill="#e6ff00" rx="2" />
+                        <rect x="71" y="381" width="18" height="18" fill="#ffffff" rx="2" />  
+                        <rect x="511" y="381" width="18" height="18" fill="#ffffff" rx="2" />
                     </svg>
                 </div>
                 <p class="pie-diagrama reveal">Ambos equipos trazan sus recorridos originales hacia las salidas inferiores, fijando las primeras estructuras en el tablero.</p>
@@ -233,11 +293,11 @@
                         <path class="path-bucle-magenta-baseB" d="M 280 230 L 340 230 L 340 160 L 410 160 L 410 210 L 520 210 L 520 390" fill="none" stroke="#ff007f" stroke-width="3.5" stroke-dasharray="8,8" stroke-linejoin="round" />
                         <path class="path-bucle-magenta-extB" d="M 520 390 L 560 300 L 560 120 L 520 80" fill="none" stroke="#ff007f" stroke-width="3.5" stroke-dasharray="8,8" stroke-linejoin="round" />
 
-                        <circle cx="280" cy="230" r="9" fill="#e6ff00" /> 
-                        <circle cx="80" cy="390" r="6" fill="#666" /> 
-                        <circle cx="520" cy="390" r="6" fill="#666" /> 
-                        <circle cx="80" cy="80" r="9" fill="#ffffff" />  
-                        <circle cx="520" cy="80" r="9" fill="#ffffff" /> 
+                        <rect x="271" y="221" width="18" height="18" fill="#e6ff00" rx="2" />
+                        <rect x="74" y="384" width="12" height="12" fill="#666" rx="1.5" />
+                        <rect x="514" y="384" width="12" height="12" fill="#666" rx="1.5" />
+                        <rect x="71" y="71" width="18" height="18" fill="#ffffff" rx="2" />  
+                        <rect x="511" y="71" width="18" height="18" fill="#ffffff" rx="2" />
                     </svg>
                 </div>
                 <p class="pie-diagrama reveal">Al comprobar que las salidas inferiores no son válidas, los equipos no desarman lo construido: extienden y ramifican nuevas conexiones desde los extremos alcanzados hacia las metas superiores.</p>
@@ -245,164 +305,117 @@
         </div>
     </section>
 
-    <section id="mas-alla" class="section scroll-section">
+    <!-- SECCIÓN 04: DEL JUEGO AL SISTEMA -->
+    <section id="del-juego-al-sistema" class="section scroll-section section-centered">
         <div class="section-header reveal">
-            <span class="section-number">04.</span>
-            <h2 class="section-title" style="font-size: clamp(2rem, 4.5vw, 5rem);">MÁS ALLÁ<br>DEL <span class="yellow-text">JUEGO</span></h2>
+            <span class="preheading">// TRANSICIÓN CONCEPTUAL</span>
+            <h2 class="section-title">Más allá<br><span class="cyan">del tablero</span></h2>
         </div>
-        <p class="section-text reveal">Más allá de encontrar una salida, el juego permitió observar cómo elementos independientes pueden formar estructuras complejas cuando establecen relaciones entre sí.</p>
-        <p class="section-text reveal">Durante cada recorrido, las piezas se conectan de distintas maneras, generando caminos y posibilidades que cambian constantemente.</p>
-        <p class="section-text reveal">Esta dinámica hizo visible la importancia de las conexiones y cómo la interacción entre elementos simples puede dar lugar a configuraciones más amplias y diversas.</p>
-    </section>
 
-    <section id="conceptos" class="section scroll-section">
-        <div class="section-header reveal">
-            <span class="section-number">05.</span>
-            <h2 class="section-title">CONCEPTOS<br><span class="cyan">CLAVE</span></h2>
-        </div>
-        
-        <div class="concepts-grid reveal">
-            <div class="concept-item">
-                <h3>Fragmentación</h3>
-                <p>Elementos independientes que aún no establecen relaciones.</p>
+        <div class="traduccion-wrapper reveal">
+            <div class="traduccion-texto-intro">
+                <p class="section-text" style="font-size: 1.3rem;">La exploración se enfoca en las relaciones y trayectorias que emergen de la interacción.</p>
             </div>
-            <div class="concept-item">
-                <h3>Movimiento</h3>
-                <p>Desplazamientos que modifican las posibilidades del sistema.</p>
-            </div>
-            <div class="concept-item">
-                <h3>Trayectorias</h3>
-                <p>Recorridos generados a partir de las decisiones y conexiones.</p>
-            </div>
-            <div class="concept-item">
-                <h3 style="color: var(--magenta);">Relación</h3>
-                <p>Encuentros entre elementos que producen nuevas configuraciones.</p>
-            </div>
-            <div class="concept-item">
-                <h3 style="color: var(--yellow);">Construcción</h3>
-                <p>Estructuras que emergen a partir de múltiples conexiones.</p>
-            </div>
-            <div class="concept-item">
-                <h3>Descubrimiento</h3>
-                <p>Comprensión del sistema a través de su transformación.</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="exploracion" class="section scroll-section">
-        <div class="section-header reveal">
-            <span class="section-number">06.</span>
-            <h2 class="section-title"><span class="magenta-text">FUNDAMENTO</span></h2>
-        </div>
-        <p class="section-text reveal">La propuesta surge de observar cómo pequeñas decisiones generan múltiples posibilidades dentro de una red de relaciones.</p>
-        <p class="section-text reveal">Durante el juego, cada elección modifica el recorrido y condiciona las conexiones que pueden establecerse posteriormente, dando lugar a distintas configuraciones y resultados. A medida que las piezas se relacionan entre sí, se construye un sistema dinámico en el que cada elemento influye en el conjunto.</p>
-    </section>
-
-<section class="seccion-diagrama-locomotive" data-scroll-section>
-    
-    <div class="section-header reveal" data-scroll data-scroll-speed="1">
-        <span class="section-number">07. MAPA CONCEPTUAL</span>
-        <h2 class="section-title">
-            El Sistema <br>
-            <span class="magenta-text">en Relaciones</span>
-        </h2>
-    </div>
-
-    <div class="contenedor-flujo-lineal" style="height: 600px;">
-        
-        <svg class="svg-flujo-continuo" viewBox="0 0 1000 600" preserveAspectRatio="none">
-            <path class="linea-bucle-animada" d="M 40 50 L 320 50 L 320 170 L 680 170 L 680 300 L 250 300 L 250 430 L 700 430 L 700 560" />
             
-            <circle class="punto-nodo" cx="40" cy="50" r="5" fill="#00aaff" />
-            <circle class="punto-nodo" cx="320" cy="170" r="5" fill="#ff007f" />
-            <circle class="punto-nodo" cx="680" cy="300" r="5" fill="#e6ff00" />
-            <circle class="punto-nodo" cx="250" cy="430" r="5" fill="#00aaff" />
-            <circle class="punto-nodo" cx="700" cy="560" r="6" fill="#ff007f" />
-        </svg>
-
-        <div class="hito-sistema" style="top: 15px; left: 70px;" data-scroll data-scroll-speed="1.1">
-            <span class="numero-hito"></span>
-            <h3>Conexión</h3>
-            <p>Encuentro inicial entre unidades independientes.</p>
+            <div class="traduccion-tabla">
+                <div class="traduccion-fila header-fila">
+                    <div class="trad-col">Juego Físico</div>
+                    <div class="trad-col spacer-col">➔</div>
+                    <div class="trad-col">Exploración Sistémica</div>
+                </div>
+                <div class="traduccion-fila">
+                    <div class="trad-col">Piezas</div>
+                    <div class="trad-col spacer-col"><span class="trad-indicator"></span></div>
+                    <div class="trad-col">Nodos</div>
+                </div>
+                <div class="traduccion-fila">
+                    <div class="trad-col">Conexiones</div>
+                    <div class="trad-col spacer-col"><span class="trad-indicator"></span></div>
+                    <div class="trad-col">Relaciones</div>
+                </div>
+                <div class="traduccion-fila">
+                    <div class="trad-col">Movimientos</div>
+                    <div class="trad-col spacer-col"><span class="trad-indicator"></span></div>
+                    <div class="trad-col">Interacciones</div>
+                </div>
+                <div class="traduccion-fila">
+                    <div class="trad-col">Recorrido</div>
+                    <div class="trad-col spacer-col"><span class="trad-indicator"></span></div>
+                    <div class="trad-col">Trayectoria</div>
+                </div>
+                <div class="traduccion-fila">
+                    <div class="trad-col">Resultado</div>
+                    <div class="trad-col spacer-col"><span class="trad-indicator"></span></div>
+                    <div class="trad-col">Configuración emergente</div>
+                </div>
+            </div>
         </div>
-
-        <div class="hito-sistema" style="top: 135px; left: 360px;" data-scroll data-scroll-speed="1.2">
-            <span class="numero-hito"></span>
-            <h3>Relación</h3>
-            <p>Vínculo estructural que altera las propiedades.</p>
-        </div>
-
-        <div class="hito-sistema" style="top: 265px; left: 720px;" data-scroll data-scroll-speed="0.9">
-            <span class="numero-hito"> </span>
-            <h3>Trayectoria</h3>
-            <p>Vector de movimiento generado por las piezas.</p>
-        </div>
-
-        <div class="hito-sistema" style="top: 395px; left: 290px;" data-scroll data-scroll-speed="1.3">
-            <span class="numero-hito"></span>
-            <h3>Exploración</h3>
-            <p>Reconocimiento interactivo de los recorridos.</p>
-        </div>
-
-        <div class="hito-sistema" style="top: 525px; left: 400px;" data-scroll data-scroll-speed="1.0">
-            <span class="numero-hito" style="color: var(--magenta);">// 05</span>
-            <h3>Sistema</h3>
-            <p>La estructura emergente que unifica el todo.</p>
-        </div>
-
-    </div>
-</section>
-   
-</section>
-    </div>
-</section>
-  <section id="cierre" class="section scroll-section" style="min-height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
-        <span class="section-number reveal">CIERRE</span>
-        <h2 class="section-title reveal" style="max-width: 100%; font-size: clamp(3rem, 7vw, 7rem); margin-bottom: 4vh;">
-            Las relaciones<br>construyen <span class="cyan">significado.</span>
-        </h2>
-        
-       <a href="exploracion.html" class="btn-massive">INICIAR EXPLORACIÓN</a>.
     </section>
 
-    <script>
-        const nodosParallax = document.querySelectorAll('.nodo-parallax');
-        let scrollActual = window.pageYOffset;
-        let scrollInercial = scrollActual;
-        const factorSuavizado = 0.07; // Controla la elasticidad del movimiento
+    <!-- SECCIÓN 05: FUNDAMENTOS -->
+    <section id="fundamento" class="section scroll-section">
+        <div class="section-header reveal">
+            <h2 class="section-title"><span class="yellow-text">FUNDAMENTO</span></h2>
+        </div>
 
-        function actualizarInerciaParallax() {
-            scrollActual = window.pageYOffset;
+        <div class="fundamento-texto-explicativo reveal">
+            <div class="fundamento-item">
+                <h3 class="fundamento-concept">// EXPLORACIÓN</h3>
+                <p class="fundamento-para">La exploración en Conectando va más allá de recorrer un espacio preexistente; el entorno se devela y se co-construye activamente a través de las decisiones de los jugadores. Cada pieza colocada expande el territorio visible y redefine la orientación de la búsqueda, convirtiendo al jugador en un creador activo de la trayectoria.</p>
+            </div>
             
-            // Suavizado matemático de la velocidad de scroll
-            scrollInercial += (scrollActual - scrollInercial) * factorSuavizado;
+            <div class="fundamento-item">
+                <h3 class="fundamento-concept">// TRANSFORMACIÓN</h3>
+                <p class="fundamento-para">La transformación es el motor dinámico del juego: el tablero no es una superficie estática, sino una red de relaciones en constante cambio. Un solo movimiento puede abrir salidas inesperadas o clausurar trayectorias completas, forzando a los equipos a reconfigurar su estrategia en tiempo real.</p>
+            </div>
+            
+            <div class="fundamento-item">
+                <h3 class="fundamento-concept">// INCERTIDUMBRE</h3>
+                <p class="fundamento-para">La incertidumbre define la experiencia del recorrido, donde las salidas reales y falsas permanecen ocultas y los flujos de conexión cambian con cada turno. El avance no sigue un plan rígido, sino que emerge de la adaptación continua y la reorganización de los caminos frente a la imprevisibilidad del mazo.</p>
+            </div>
 
-            nodosParallax.forEach(nodo => {
-                const velocidad = parseFloat(nodo.getAttribute('data-scroll-speed')) || 1;
-                
-                // Calculamos el desplazamiento respecto a la posición original de la sección
-                const seccion = document.querySelector('.seccion-diagrama-locomotive');
-                const seccionTop = seccion.offsetTop;
-                
-                // Solo calcula la inercia si el usuario está cerca o scrolleando la zona del mapa
-                const desfaseEje = (scrollInercial - seccionTop) * 0.12 * velocidad;
-                
-                // ¡AQUÍ ESTÁ EL TRUCO!: Forzamos el -50% del centrado de CSS y le sumamos el movimiento líquido
-                nodo.style.transform = `translate(-50%, calc(-50% - ${desfaseEje}px))`;
-            });
+            <div class="fundamento-item">
+                <h3 class="fundamento-concept">// EMERGENCIA</h3>
+                <p class="fundamento-para">La emergencia se manifiesta cuando el comportamiento global de la red supera la suma de sus movimientos individuales. A partir de reglas sencillas de colocación y de la interacción de los jugadores, se auto-organiza un sistema complejo en el tablero, revelando patrones de orden colectivo que trascienden las intenciones iniciales de cada dupla.</p>
+            </div>
+        </div>
+    </section>
 
-            requestAnimationFrame(actualizarInerciaParallax);
-        }
+    <!-- SECCIÓN 06: CONCEPTOS (Red Semántica) -->
+    <section id="mapa-relaciones" class="section scroll-section">
+        <div class="section-header reveal">
+            <span class="preheading">// INTERFAZ CONCEPTUAL</span>
+            <h2 class="section-title">RED DE<br><span class="magenta-text">CONCEPTOS</span></h2>
+        </div>
 
-        // Ejecuta la animación cuadro por cuadro de forma nativa
-        window.addEventListener('scroll', () => {
-            // Mantiene el tracking del scroll activo
-        });
+        <div class="conceptos-canvas-container reveal" style="width: 100%; height: 450px; background-color: #050505; border: 1px solid rgba(255,255,255,0.05); position: relative; border-radius: 2px; overflow: hidden; margin-top: 30px;">
+            <canvas id="conceptos-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: block;"></canvas>
+            <div class="conceptos-instrucciones" style="position: absolute; bottom: 20px; left: 20px; font-family: 'Geist Mono', monospace; font-size: 9px; letter-spacing: 2px; color: rgba(255,255,255,0.3); pointer-events: none;">// INTERACCIÓN: PASA EL CURSOR SOBRE UN CONCEPTO PARA ILUMINAR SUS RELACIONES</div>
+        </div>
+    </section>
 
-        window.addEventListener('load', () => {
-            requestAnimationFrame(actualizarInerciaParallax);
-        });
-    </script>
+    <!-- SECCIÓN 07: HACIA LA EXPLORACIÓN -->
+    <section id="cierre" class="section scroll-section" style="min-height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; text-align: left; position: relative; overflow: hidden;">
+        <canvas id="cierre-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; opacity: 0.35;"></canvas>
+        
+        <div class="cierre-content reveal" style="position: relative; z-index: 2; width: 100%; max-width: 900px;">
+            <span class="preheading">// TRANSICIÓN AL SISTEMA</span>
+            <h2 class="section-title" style="max-width: 100%; font-size: clamp(1.8rem, 4vw, 4rem); margin-bottom: 4vh; text-align: left; line-height: 1.35; text-transform: none;">
+                Lo que en el juego aparece como conexión entre piezas, en la exploración se transforma en un sistema dinámico de relaciones.
+            </h2>
+           
+            <a href="exploracion.html" id="btn-ingresar-exploracion" class="btn-outline btn-massive-outline" style="margin-top: 20px; display: inline-block;">Ingresar a la exploración</a>
+        </div>
+    </section>
+
+    <!-- Visualizador Lightbox de Galería de Alta Gama -->
+    <div id="galeria-lightbox" class="lightbox-overlay">
+        <span class="lightbox-close">&times;</span>
+        <div class="lightbox-content">
+            <img id="lightbox-img" src="" alt="Vista ampliada de la partida">
+            <div id="lightbox-caption" class="lightbox-caption"></div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>

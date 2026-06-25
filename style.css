@@ -1,26 +1,176 @@
 /* ==========================================================
    1. ESTILOS BASE Y TIPOGRAFÍA ORIGINAL
    ========================================================== */
-* { 
-    margin: 0; 
-    padding: 0; 
-    box-sizing: border-box; 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-html { 
-    scroll-behavior: smooth; 
-    background-color: #050505; 
+
+html {
+    scroll-behavior: smooth;
+    background-color: #050505;
 }
+
 
 body {
-    background-color: #050505; 
+    background-color: #050505;
     color: #f4f4f4;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
     line-height: 1.3;
+    position: relative;
 }
+
+
+/* Fondo de cuadraditos petit con scroll (Paralaje) */
+#fondo-cuadrados-scroll {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.cuadradito-petit {
+    position: absolute;
+    border-radius: 1px;
+    opacity: 0.12;
+    filter: blur(2px);
+    transition: transform 0.1s ease-out;
+    will-change: transform;
+}
+
+
+body.loading {
+    overflow: hidden;
+}
+
+
+/* ==========================================================
+   PRECARGADOR CONCEPTUAL (Estilo de Exploración)
+   ========================================================== */
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #030303;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s;
+}
+
+#preloader.fade-out {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.preloader-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    width: 90%;
+    max-width: 320px;
+}
+
+.preloader-animation {
+    position: relative;
+    width: 160px;
+    height: 160px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Nodo central cian pulsante con resplandor, idéntico a Paso 0 de Exploración */
+.loader-central-node {
+    width: 55px;
+    height: 55px;
+    border: 1.5px solid #00aaff;
+    background-color: rgba(0, 170, 255, 0.05);
+    box-shadow: 0 0 15px rgba(0, 170, 255, 0.6);
+    animation: loader-pulse 2s infinite ease-in-out;
+}
+
+/* Nodos satélite que representan cuadritos flotantes de color */
+.loader-node {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+}
+
+.loader-node-1 {
+    background-color: #00aaff; /* Cian */
+    box-shadow: 0 0 8px #00aaff;
+    animation: loader-orbit-1 6s infinite linear;
+}
+
+.loader-node-2 {
+    background-color: #ff007f; /* Magenta */
+    box-shadow: 0 0 8px #ff007f;
+    animation: loader-orbit-2 6s infinite linear;
+}
+
+.loader-node-3 {
+    background-color: #e6ff00; /* Amarillo */
+    box-shadow: 0 0 8px #e6ff00;
+    animation: loader-orbit-3 6s infinite linear;
+}
+
+/* Animaciones de órbita y pulsación */
+@keyframes loader-pulse {
+    0%, 100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 10px rgba(0, 170, 255, 0.4);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 22px rgba(0, 170, 255, 0.8);
+    }
+}
+
+@keyframes loader-orbit-1 {
+    0% { transform: rotate(0deg) translate(65px) rotate(0deg); }
+    100% { transform: rotate(360deg) translate(65px) rotate(-360deg); }
+}
+
+@keyframes loader-orbit-2 {
+    0% { transform: rotate(120deg) translate(65px) rotate(-120deg); }
+    100% { transform: rotate(480deg) translate(65px) rotate(-480deg); }
+}
+
+@keyframes loader-orbit-3 {
+    0% { transform: rotate(240deg) translate(65px) rotate(-240deg); }
+    100% { transform: rotate(600deg) translate(65px) rotate(-600deg); }
+}
+
+.preloader-text {
+    font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.4);
+    text-transform: uppercase;
+    text-align: center;
+    animation: preloaderTextPulse 1.5s infinite ease-in-out;
+}
+
+@keyframes preloaderTextPulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.8; }
+}
+
 
 :root {
     --cyan: #00aaff;
@@ -30,95 +180,129 @@ body {
     --bg-tan: #210510;
 }
 
+
 .cyan { color: var(--cyan); }
 .magenta-text { color: var(--magenta); }
 .yellow-text { color: var(--yellow); }
+
 
 /* ==========================================================
    2. NAVEGACIÓN FIJA Y LIMPIA
    ========================================================== */
 .franja-nav {
-    position: fixed; 
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 90px;
-    padding: 0 4vw; 
-    display: flex; 
-    justify-content: flex-end; 
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    padding: 0 8vw;
+    display: flex;
+    justify-content: flex-end;
     align-items: center;
-    background: rgba(5, 5, 5, 0.9); 
+    background: rgba(5, 5, 5, 0.9);
     backdrop-filter: blur(5px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     z-index: 100;
-    opacity: 0; 
-    transform: translateY(-20px); 
+    opacity: 0;
+    transform: translateY(-20px);
     transition: all 0.5s ease;
 }
 
-.franja-nav.is-visible { 
-    opacity: 1; 
-    transform: translateY(0); 
+
+.franja-nav.is-visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
-.nav-list { 
-    list-style: none; 
-    display: flex; 
-    gap: 40px; 
+
+.nav-list {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 40px;
 }
+
 
 .nav-link {
-    text-decoration: none; 
-    color: #888; 
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.45);
     font-size: 0.85rem;
-    font-weight: bold; 
-    letter-spacing: 1px; 
+    font-weight: bold;
+    letter-spacing: 2px;
     text-transform: uppercase;
-    transition: color 0.3s ease;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 0;
 }
+
 
 .nav-link:hover { color: #ffffff; }
 .nav-link.active-nav { color: var(--cyan); }
 
-/* ==========================================================
-   3. PORTADA IDÉNTICA A LA REFERENCIA
-   ========================================================== */
+/* --- RESPONSIVIDAD DE LA CABECERA EN MÓVIL --- */
+@media (max-width: 768px) {
+    .franja-nav {
+        height: 70px;
+        justify-content: center !important;
+        padding: 0 !important;
+        top: 0;
+        right: 0;
+        transform: translateY(0) !important;
+    }
+    .nav-list {
+        gap: 20px;
+        flex-direction: row;
+    }
+    .nav-link {
+        font-size: 0.75rem;
+        padding: 6px 0;
+    }
+}
+
 .hero {
-    min-height: 100vh; 
-    display: flex; 
+    min-height: 100vh;
+    display: flex;
     align-items: center;
-    justify-content: space-between; 
-    padding: 15vh 8vw; 
-    position: relative; 
+    justify-content: space-between;
+    padding: 15vh 8vw;
+    position: relative;
     z-index: 2;
 }
 
-.hero-left { 
-    display: flex; 
-    flex-direction: column; 
-    gap: 40px; 
+
+.hero-left {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
 }
 
+
 .mega-title {
-    display: flex; 
+    display: flex;
     flex-direction: column;
-    font-size: clamp(6rem, 12vw, 14rem); 
+    font-size: clamp(6rem, 12vw, 14rem);
     font-weight: 900;
-    line-height: 0.95; 
-    letter-spacing: -2px; 
+    line-height: 0.95;
+    letter-spacing: -2px;
     text-transform: uppercase;
 }
 
+
 .title-row {
-    display: flex; 
-    align-items: center; 
-    opacity: 0; 
+    display: flex;
+    align-items: center;
+    opacity: 0;
     transform: translateY(40px);
     animation: slideUpFade 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.row-1 { animation-delay: 0.1s; } 
+
+.row-1 { animation-delay: 0.1s; }
 .row-2 { animation-delay: 0.3s; }
+
 
 .text-con { color: #ffffff; padding-right: 15px; }
 .text-ec { color: var(--cyan); background-color: var(--bg-ec); padding: 0 20px; }
@@ -126,157 +310,192 @@ body {
 .text-do { color: #ffffff; display: flex; align-items: baseline; }
 .text-dot { color: var(--yellow); }
 
-.magenta-box {
-    border: 2px solid var(--magenta); 
-    padding: 30px 40px; 
-    max-width: 600px;
-    opacity: 0; 
-    transform: translateY(40px); 
+
+.hero-description-clean {
+    opacity: 0;
+    transform: translateY(40px);
     animation: slideUpFade 1s 0.5s forwards;
 }
 
-.magenta-box p { 
-    color: #ffffff; 
-    font-size: clamp(1rem, 1.2vw, 1.2rem); 
-    font-weight: bold; 
-    line-height: 1.5; 
+.hero-description-clean p {
+    color: #ffffff !important;
+    font-size: clamp(1rem, 1.2vw, 1.25rem) !important;
+    line-height: 1.6 !important;
+    margin-top: 0 !important;
+    font-weight: normal !important;
 }
 
+
 .hero-right {
-    display: flex; 
-    flex-direction: column; 
-    max-width: 350px; 
-    margin-bottom: 10vh;
-    opacity: 0; 
-    transform: translateY(40px); 
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 450px;
+    margin-bottom: 0;
+    opacity: 0;
+    transform: translateY(40px);
     animation: slideUpFade 1s 0.7s forwards;
 }
 
-.white-line { 
-    border: none; 
-    border-top: 2px solid #ffffff; 
-    width: 100%; 
-    margin-bottom: 20px; 
+.contenedor-3d-hero {
+    width: 420px;
+    height: 420px;
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
 }
 
-.hero-right p { 
-    color: #aaaaaa; 
-    font-size: 1.1rem; 
-    line-height: 1.6; 
+#caja-hero-3d {
+    width: 100%;
+    height: 100%;
+    outline: none;
 }
 
-@keyframes slideUpFade { 
-    to { 
-        opacity: 1; 
-        transform: translateY(0); 
-    } 
+
+.white-line {
+    border: none;
+    border-top: 2px solid #ffffff;
+    width: 100%;
+    margin-bottom: 20px;
 }
+
+
+.hero-right p {
+    color: #aaaaaa;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+
+@keyframes slideUpFade {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 
 /* ==========================================================
    4. MARQUESINA RECTA Y SUAVE
    ========================================================== */
 .marquee-container {
-    width: 100%; 
-    padding: 2.5vh 0; 
+    width: 100%;
+    padding: 2.5vh 0;
     background-color: var(--magenta);
-    color: #050505; 
-    overflow: hidden; 
+    color: #050505;
+    overflow: hidden;
     white-space: nowrap;
-    display: flex; 
-    align-items: center; 
+    display: flex;
+    align-items: center;
     border-top: 1px solid #111;
-    border-bottom: 1px solid #111; 
-    position: relative; 
+    border-bottom: 1px solid #111;
+    position: relative;
     z-index: 10;
-    margin: 5vh 0 10vh 0; 
-    opacity: 0.6; 
+    margin: 5vh 0 10vh 0;
+    opacity: 0.6;
     transition: opacity 0.3s ease;
+    font-family: 'Geist Mono', monospace;
 }
+
 
 .marquee-container:hover { opacity: 0.9; }
 
+
 .marquee-content {
-    font-size: 1.5rem; 
-    font-weight: bold; 
+    font-size: 1.5rem;
+    font-weight: bold;
     text-transform: uppercase;
-    letter-spacing: 2px; 
-    display: inline-block; 
+    letter-spacing: 2px;
+    display: inline-block;
     animation: marqueeScroll 25s linear infinite;
 }
 
-@keyframes marqueeScroll { 
-    0% { transform: translateX(0); } 
-    100% { transform: translateX(-50%); } 
+
+@keyframes marqueeScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
 }
+
 
 /* ==========================================================
    5. SECCIONES DE TEXTO (FORMATO LIMPIO)
    ========================================================== */
-.section { 
-    padding: 10vh 8vw; 
-    display: flex; 
-    flex-direction: column; 
-    position: relative; 
-    z-index: 2; 
+.section {
+    padding: 12vh 8vw;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 2;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
+
 
 .section-header { margin-bottom: 4vh; }
 
+
 .section-number {
-    font-family: monospace; 
-    font-size: 1.2rem; 
+    font-family: monospace;
+    font-size: 1.2rem;
     color: #666;
-    display: block; 
-    margin-bottom: 1vh; 
+    display: block;
+    margin-bottom: 1vh;
     letter-spacing: 1px;
 }
 
+
 .section-title {
-    font-size: clamp(2.5rem, 6vw, 6rem); 
-    font-weight: 900; 
+    font-size: clamp(2.5rem, 6vw, 6rem);
+    font-weight: 900;
     line-height: 0.95;
-    letter-spacing: -1px; 
-    text-transform: uppercase; 
-    margin-bottom: 4vh; 
+    letter-spacing: -1px;
+    text-transform: uppercase;
+    margin-bottom: 4vh;
     max-width: 90%;
 }
 
+
 .section-text {
-    font-size: clamp(1.1rem, 2vw, 1.8rem); 
-    line-height: 1.5; 
+    font-size: clamp(1.1rem, 2vw, 1.8rem);
+    line-height: 1.5;
     color: #bbbbbb;
-    max-width: 900px; 
-    font-weight: normal; 
+    max-width: 900px;
+    font-weight: normal;
     margin-bottom: 3vh;
 }
+
 
 /* ==========================================================
    6. WIREFRAMES & ESQUEMA SVG (FIGMA)
    ========================================================== */
 .wireframe-box {
-    border: 1px solid #333; 
-    border-radius: 4px; 
+    border: 1px solid #333;
+    border-radius: 4px;
     background: rgba(255, 255, 255, 0.02);
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: #555;
-    font-size: 0.9rem; 
-    text-align: center; 
-    padding: 20px; 
-    font-weight: bold; 
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 20px;
+    font-weight: bold;
     letter-spacing: 1px;
 }
 
-.schema-box { 
-    width: 100%; 
-    max-width: 700px; 
-    height: 500px; 
-    margin-top: 4vh; 
-    padding: 0; 
-    border: 1px solid #222; 
-    background-color: #09090b; 
-    background-image: 
+
+.schema-box {
+    width: 100%;
+    max-width: 700px;
+    height: 500px;
+    margin-top: 4vh;
+    padding: 0;
+    border: 1px solid #222;
+    background-color: #09090b;
+    background-image:
         linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
     background-size: 30px 30px;
@@ -284,163 +503,153 @@ body {
     border-radius: 4px;
 }
 
+
 /* CONCEPTOS CLAVE */
-.concepts-grid { 
-    display: grid; 
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
-    gap: 40px; 
-    margin-top: 5vh; 
+.concepts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+    margin-top: 5vh;
 }
 
-.concept-item { 
-    border-top: 2px solid var(--cyan); 
-    padding-top: 20px; 
+
+.concept-item {
+    border-top: 2px solid var(--cyan);
+    padding-top: 20px;
 }
 
-.concept-item h3 { 
-    font-size: 1.4rem; 
-    margin-bottom: 10px; 
-    color: #fff; 
-    font-weight: bold; 
-    text-transform: uppercase; 
+
+.concept-item h3 {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+    color: #fff;
+    font-weight: bold;
+    text-transform: uppercase;
 }
 
-.concept-item p { 
-    color: #888; 
-    font-size: 1.1rem; 
-    line-height: 1.4; 
+
+.concept-item p {
+    color: #888;
+    font-size: 1.1rem;
+    line-height: 1.4;
 }
+
 
 .btn-massive {
-    display: inline-block; 
-    background-color: transparent; 
+    display: inline-block;
+    background-color: transparent;
     color: var(--yellow);
-    border: 2px solid var(--yellow); 
-    padding: 20px 50px; 
+    border: 2px solid var(--yellow);
+    padding: 20px 50px;
     font-size: 1.2rem;
-    font-weight: bold; 
-    text-transform: uppercase; 
+    font-weight: bold;
+    text-transform: uppercase;
     text-decoration: none;
-    letter-spacing: 2px; 
-    margin-top: 5vh; 
+    letter-spacing: 2px;
+    margin-top: 5vh;
     transition: all 0.3s ease;
 }
 
-.btn-massive:hover { 
-    background-color: var(--yellow); 
-    color: #000; 
+
+.btn-massive:hover {
+    background-color: var(--yellow);
+    color: #000;
 }
+
 
 /* ==========================================================
    7. ANIMACIONES DE REVELACIÓN (SCROLL)
    ========================================================== */
-.reveal { 
-    opacity: 0; 
-    transform: translateY(60px); 
-    transition: all 1s ease-out; 
+.reveal {
+    opacity: 0;
+    transform: translateY(60px);
+    transition: all 1s ease-out;
 }
 
-.reveal.active { 
-    opacity: 1; 
-    transform: translateY(0); 
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
 }
+
 
 /* ==========================================================
    8. FONDO DE PIEZAS (FLOTAN SOLAS)
    ========================================================== */
 .bg-pieces-container {
-    position: fixed; 
-    top: 0; 
-    left: 0; 
-    width: 100%; 
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     height: 100vh;
-    pointer-events: none; 
-    z-index: 0; 
+    pointer-events: none;
+    z-index: 0;
     filter: blur(8px);
 }
 
-.bg-piece { 
-    position: absolute; 
-    opacity: 0.35; 
+
+.bg-piece {
+    position: absolute;
+    opacity: 0.35;
     animation: floatAutonomous infinite alternate ease-in-out;
     will-change: transform;
 }
+
 
 @keyframes floatAutonomous {
     0% { transform: translate(0px, 0px) rotate(0deg); }
     100% { transform: translate(40px, -60px) rotate(15deg); }
 }
 
+
 ::-webkit-scrollbar { width: 12px; }
 ::-webkit-scrollbar-track { background: #050505; border-left: 1px solid rgba(255,255,255,0.05); }
 ::-webkit-scrollbar-thumb { background-color: var(--magenta); border-radius: 2px; }
 ::-webkit-scrollbar-thumb:hover { background-color: var(--cyan); }
 
+
 /* ==========================================================
    9. CONFIGURACIÓN EN DOS COLUMNAS (TEXTO E INTERACCIÓN 3D)
    ========================================================== */
+/* Asegura que el contenedor de las dos columnas controle los tamaños */
 .bloque-dos-columnas {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
     width: 100%;
-    max-width: 1200px;
-    gap: 4vw; 
-    margin-bottom: 6vh;
+    align-items: center; /* Centra verticalmente el render con el texto */
+    justify-content: space-between;
+    gap: 40px; /* Espaciado controlado entre las dos secciones */
 }
 
+/* COLUMNA TEXTO: La mantenemos compacta para que NO se estire ni se separe del título */
 .columna-texto {
-    flex: 1.2; 
+    flex: 0 0 40%; /* Ocupa exactamente el 40% del ancho, ni más ni menos */
+    max-width: 450px; /* Evita que el texto se desparrame en pantallas gigantes */
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
 }
 
-.columna-texto .section-text {
-    font-size: clamp(1rem, 1.5vw, 1.35rem); 
-    line-height: 1.6;
-    color: #bbbbbb;
-    margin-bottom: 2.5vh;
-    text-align: left;
-}
-
+/* COLUMNA RENDER: Le damos más espacio para que el modelo luzca gigante */
 .columna-render {
-    flex: 0.8; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    flex: 0 0 55%; /* Se lleva el 55% restante del espacio */
+    width: 100%;
 }
 
+/* El contenedor interno 3D adaptado para máxima fluidez */
 .contenedor-3d {
     width: 100%;
-    max-width: 420px; 
-    height: 340px;    
+    height: clamp(450px, 60vh, 750px); /* Crece de forma profesional según la pantalla */
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative;
-    z-index: 5;
 }
 
-model-viewer {
+#caja-interactive-3d {
     width: 100%;
     height: 100%;
-    background-color: transparent;
     outline: none;
-}
-
-@media (max-width: 850px) {
-    .bloque-dos-columnas {
-        flex-direction: column;
-        gap: 4vh;
-    }
-    .columna-texto .section-text {
-        text-align: left;
-    }
-    .contenedor-3d {
-        max-width: 340px;
-        height: 280px;
-    }
 }
 
 /* ==========================================================
@@ -449,35 +658,39 @@ model-viewer {
 .seccion-mecanica-vertical {
     display: flex;
     flex-direction: column;
-    align-items: flex-start; 
+    align-items: flex-start;
     width: 100%;
 }
 
+
 .text-mecanica-ancho {
-    font-size: clamp(1rem, 1.4vw, 1.25rem) !important; 
+    font-size: clamp(1rem, 1.4vw, 1.25rem) !important;
     color: #aaaaaa;
-    max-width: 850px; 
-    margin-bottom: 6vh; 
-    text-align: left; 
+    max-width: 850px;
+    margin-bottom: 6vh;
+    text-align: left;
 }
+
 
 .diagramas-comparativa {
     display: flex !important;
-    flex-direction: row !important; 
-    gap: 4vw;                       
+    flex-direction: row !important;
+    gap: 4vw;                      
     width: 100%;
-    max-width: 1100px; 
+    max-width: 1100px;
     justify-content: space-between;
     align-items: flex-start;        
 }
+
 
 .columna-diagrama {
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;            
-    text-align: center;             
+    text-align: center;            
 }
+
 
 .subtitulo-diagrama-comp {
     font-size: 0.95rem;
@@ -488,20 +701,23 @@ model-viewer {
     margin-bottom: 2.5vh;
 }
 
+
 .diagramas-comparativa .schema-box {
     width: 100%;
     max-width: 460px;              
     height: 350px;                  
-    margin-bottom: 2.5vh;           
+    margin-bottom: 2.5vh;          
 }
+
 
 .pie-diagrama {
     font-size: 0.9rem;
     color: #888;
     line-height: 1.5;
     max-width: 420px;              
-    margin: 0 auto;                 
+    margin: 0 auto;                
 }
+
 
 /* ==========================================================
    11. CONTROL DE DIAGRAMAS VECTORIALES EN BUCLE CONTINUO
@@ -512,12 +728,14 @@ model-viewer {
     animation: loopDibujoCaminos 7s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
+
 @keyframes loopDibujoCaminos {
     0% { stroke-dashoffset: 800; opacity: 0; }
     5% { opacity: 1; }
     40%, 80% { stroke-dashoffset: 0; opacity: 1; }
     90%, 100% { stroke-dashoffset: -800; opacity: 0; }
 }
+
 
 .path-bucle-cyan-baseB, .path-bucle-magenta-baseB {
     stroke-dasharray: 800;
@@ -531,6 +749,7 @@ model-viewer {
     90%, 100% { stroke-dashoffset: -800; opacity: 0; }
 }
 
+
 .path-bucle-cyan-extB, .path-bucle-magenta-extB {
     stroke-dasharray: 400;
     stroke-dashoffset: 400;
@@ -543,273 +762,1661 @@ model-viewer {
     90%, 100% { stroke-dashoffset: -400; opacity: 0; }
 }
 
+
 /* ==========================================================
    12. GALERÍA: CINTA EN BUCLE PERPETUO
    ========================================================== */
-.galeria-cinta-container {
-    width: 100vw;
-    margin-left: calc(-8vw); 
-    overflow: hidden;
-    padding: 4vh 0;
-    position: relative;
-}
-
-.galeria-cinta-container::before,
-.galeria-cinta-container::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    width: 15vw;
-    height: 100%;
-    z-index: 3;
-    pointer-events: none;
-}
-.galeria-cinta-container::before {
-    left: 0;
-    background: linear-gradient(90deg, #050505 0%, transparent 100%);
-}
-.galeria-cinta-container::after {
-    right: 0;
-    background: linear-gradient(-90deg, #050505 0%, transparent 100%);
-}
-
-.cinta-movimiento-infinito {
-    display: flex;
-    width: max-content;
-    gap: 40px; 
-    animation: scrollCintaHorizontal 32s linear infinite;
-}
-
-.tarjeta-cinta {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 320px; 
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.marco-neon-glass {
+/* --- SLIDER DE ALTA GAMA CON MÁSCARA DE RECORTE --- */
+.galeria-slider-container {
     width: 100%;
-    height: 260px;
-    background: linear-gradient(135deg, rgba(20, 20, 25, 0.85) 0%, rgba(10, 15, 30, 0.9) 100%);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 2px solid rgba(0, 170, 255, 0.7); 
-    border-radius: 8px;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 
-        0 15px 35px rgba(0, 0, 0, 0.5), 
-        0 0 20px rgba(0, 170, 255, 0.2),
-        inset 0 0 15px rgba(0, 170, 255, 0.05);
-    transition: all 0.3s ease;
-}
-
-.marco-neon-glass img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    filter: drop-shadow(0px 8px 12px rgba(0,0,0,0.5));
-    transition: transform 0.3s ease;
-}
-
-.info-pie-cinta {
-    margin-top: 2vh;
-    text-align: center;
-    opacity: 0.5;
-    transition: opacity 0.3s ease;
+    margin-top: 80px;
     padding: 0 10px;
 }
 
-.info-pie-cinta h3 {
-    font-size: 0.85rem;
-    font-weight: bold;
-    color: #fff;
-    letter-spacing: 1px;
-    margin-bottom: 4px;
+.galeria-header-interface {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 24px;
 }
 
-.info-pie-cinta p {
-    font-size: 0.75rem;
-    color: #999;
-    line-height: 1.4;
+.galeria-tag {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: rgba(255, 255, 255, 0.4);
 }
 
-.tarjeta-cinta:hover {
-    transform: translateY(-12px) scale(1.02);
+.galeria-controls {
+    display: flex;
+    gap: 12px;
 }
 
-.tarjeta-cinta:hover .marco-neon-glass {
-    background: linear-gradient(135deg, rgba(35, 35, 20, 0.9) 0%, rgba(15, 15, 5, 0.95) 100%);
-    border-color: var(--yellow); 
-    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.7), 0 0 30px rgba(230, 255, 0, 0.5); 
+.btn-flecha {
+    width: 44px;
+    height: 44px;
+    background: rgba(0, 170, 255, 0.08);
+    border: 1px solid rgba(0, 170, 255, 0.3);
+    color: #00aaff;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 2px;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.tarjeta-cinta:hover .marco-neon-glass img {
-    transform: scale(1.05);
+.btn-flecha:hover {
+    background: #00aaff;
+    color: #ffffff;
+    border-color: #00aaff;
+    box-shadow: 0 0 15px rgba(0, 170, 255, 0.4);
 }
 
-.tarjeta-cinta:hover .info-pie-cinta {
+.galeria-viewport {
+    width: 100%;
+    overflow: hidden;
+    perspective: 1500px;
+    padding: 20px 0;
+    margin: -20px 0;
+}
+
+.galeria-track {
+    display: flex;
+    gap: 24px;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    width: 100%;
+    transform-style: preserve-3d;
+}
+
+.item-slider {
+    flex: 0 0 calc((100% - (24px * 2)) / 3); 
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background: rgba(255, 255, 255, 0.015);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 4px;
+    padding: 14px;
+    transition: background 0.45s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    box-sizing: border-box;
+    transform-style: preserve-3d;
+}
+
+.item-slider:hover {
+    transform: translateY(-8px);
+    background: rgba(255, 255, 255, 0.035);
+    border-color: rgba(0, 170, 255, 0.25);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* CONTENEDOR ESTRICTO: Fuerza a que el espacio sea perfectamente simétrico */
+.marco-foto {
+    width: 100%;
+    aspect-ratio: 4 / 3; /* Relación de aspecto idéntica para las 5 imágenes */
+    overflow: hidden;    /* Corta cualquier desborde de la foto original */
+    border-radius: 2px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background-color: #0d0d11; /* Fondo neutro mientras cargan los recursos */
+}
+
+/* COMPORTAMIENTO DE LA IMAGEN: Llena el contenedor sin deformarse */
+.marco-foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Centra y recorta de forma prolija según el contenedor */
+    transition: filter 0.5s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.item-slider:hover .marco-foto img {
+    filter: brightness(1.1) contrast(1.05);
+    transform: scale(1.05); /* Suave micro-zoom elegante en el hover del card */
+}
+
+.caption-galeria {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px !important;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.3);
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2px 4px 0 4px;
+}
+
+.item-slider:hover .caption-galeria {
+    color: var(--cyan);
+}
+
+@media (max-width: 1024px) {
+    .item-slider { flex: 0 0 calc((100% - 24px) / 2); }
+}
+@media (max-width: 600px) {
+    .item-slider { flex: 0 0 100%; }
+}
+
+
+/* ==========================================================================
+   DIAGRAMA CONCEPTUAL INTERCALADO EN ZIG-ZAG
+   ========================================================================== */
+/* ==========================================================================
+   DIAGRAMA HORIZONTAL UNIFORME Y PERFECTAMENTE CENTRADO
+   ========================================================================== */
+
+.seccion-diagrama-horizontal-maestra {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra el encabezado y el contenido */
+    justify-content: center;
+    padding: 100px 4%;
+}
+
+/* Caja elástica que centra el mapa respecto al ancho total del monitor */
+.eje-centrado-absoluto {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+}
+
+/* Contenedor con tus 1000px de diseño originales fijos */
+.contenedor-flujo-lineal-horizontal {
+    width: 1000px;
+    max-width: 1000px;
+    height: 400px;
+    position: relative;
+    border: none !important;
+    background: none !important;
+}
+
+.svg-flujo-continuo {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+/* Estilo unificado para las cajas de texto intercaladas */
+.hito-sistema {
+    position: absolute;
+    width: 200px;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.hito-sistema h3 {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #ffffff;
+    margin-bottom: 6px;
+}
+
+.numero-hito {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.25);
+    margin-bottom: 2px;
+}
+
+#contenedor-camino-cuadrados {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* Los pequeños cuadrados que irán brotando sobre tus círculos fijos */
+.cuadrado-guia-camino {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+}
+
+.cuadrado-guia-camino.activo {
     opacity: 1;
+    transform: translate(-50%, -50%) scale(1.3);
+    box-shadow: 0 0 10px currentColor;
 }
 
-@keyframes scrollCintaHorizontal {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(calc((-320px * 5) - (40px * 5))); }
+/* ==========================================================
+   12. SISTEMA DE TRAYECTORIA DINÁMICA (LADO DERECHO)
+   ========================================================== */
+
+/* Contenedor perimetral absoluto en el ala derecha */
+#riel-trayectoria-derecho {
+    position: fixed;
+    top: 0;
+    right: 4%;
+    width: 40px;
+    height: 100vh;
+    z-index: 5;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-@media (max-width: 968px) {
+.micro-cuadrado-bucle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background-color: #00aaff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    opacity: 0;
+    transform: scale(0) rotate(45deg);
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+}
+
+.micro-cuadrado-bucle.cristalizado {
+    opacity: 0.75;
+    transform: scale(1) rotate(0deg);
+}
+
+.section-title {
+    transition: color 0.1s cubic-bezier(0.16, 1, 0.3, 1), text-shadow 0.1s ease;
+}
+
+.section-title.iluminacion-flash {
+    color: #ffffff !important;
+    text-shadow: 0 0 25px rgba(0, 170, 255, 0.85), 0 0 50px rgba(255, 0, 127, 0.5);
+}
+
+/* ==========================================================
+   13. UNIFICACIÓN DE TAMAÑOS DE TEXTO
+   ========================================================== */
+p, 
+.section-text, 
+.hero-description-clean p, 
+.hero-right p, 
+.hito-sistema p {
+    font-size: 16px !important;
+    line-height: 1.75 !important;
+    color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.hero-description-clean p,
+.hero-right p,
+.columna-texto .section-text,
+.hito-sistema p {
+    margin-top: 0 !important;
+    margin-bottom: 24px !important;
+}
+
+.columna-texto .section-text:last-child,
+.hero-description-clean p:last-child,
+.hito-sistema p:last-child {
+    margin-bottom: 0 !important;
+}
+
+.pie-diagrama {
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+    margin-top: 16px !important;
+    margin-bottom: 0 !important;
+}
+
+/* ==========================================================
+   14. REDISEÑO DE COMPONENTES INSPIRADOS EN ARCTURIS & RESPONSIVIDAD
+   ========================================================== */
+
+.preheading {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+    margin-bottom: 15px;
+    display: inline-block;
+}
+
+.btn-outline {
+    display: inline-block;
+    background-color: transparent;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 14px 32px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 2px;
+    border-radius: 2px;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.btn-outline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    z-index: -1;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-outline:hover {
+    color: #000000;
+    border-color: #ffffff;
+}
+
+.btn-outline:hover::before {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+#que-es .btn-outline {
+    color: var(--magenta);
+    border-color: rgba(255, 0, 127, 0.4);
+}
+#que-es .btn-outline::before {
+    background-color: var(--magenta);
+}
+#que-es .btn-outline:hover {
+    color: #ffffff;
+    border-color: var(--magenta);
+}
+
+.btn-massive-outline {
+    padding: 20px 48px;
+    font-size: 1.05rem;
+    color: var(--yellow) !important;
+    border-color: rgba(230, 255, 0, 0.4) !important;
+}
+.btn-massive-outline::before {
+    background-color: var(--yellow);
+}
+.btn-massive-outline:hover {
+    color: #000000 !important;
+    border-color: var(--yellow) !important;
+}
+
+.scroll-down-btn {
+    width: 50px;
+    height: 50px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 2px;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin-top: 30px;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scroll-down-btn:hover {
+    background: #ffffff;
+    color: #000000;
+    border-color: #ffffff;
+    transform: translateY(5px);
+}
+
+.concepts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-top: 40px;
+    width: 100%;
+}
+
+
+.concept-item {
+    border-top: 2px solid var(--accent-color, var(--cyan));
+    background: #050505;
+    border-left: 1px solid rgba(255, 255, 255, 0.04);
+    border-right: 1px solid rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    padding: 40px 35px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border-radius: 0 0 4px 4px;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+
+.concept-item:hover {
+    background: #0d0d11;
+    border-left-color: rgba(255, 255, 255, 0.08);
+    border-right-color: rgba(255, 255, 255, 0.08);
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+
+.concept-index {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--accent-color, var(--cyan));
+    letter-spacing: 1px;
+}
+
+
+.concept-item h3 {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+
+.concept-item p {
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+    color: rgba(255, 255, 255, 0.6) !important;
+    margin: 0 !important;
+}
+
+
+/* --- CONSULTAS DE MEDIOS PARA RESPONSIVIDAD COMPLETA --- */
+
+
+@media (max-width: 1024px) {
+    .hero {
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 5vh;
+        padding: 15vh 6vw 10vh 6vw;
+        min-height: auto;
+    }
+    
+    .hero-right {
+        max-width: 100%;
+        margin-bottom: 0;
+        width: 100%;
+        align-items: center;
+    }
+    
+    .contenedor-3d-hero {
+        width: 300px;
+        height: 300px;
+        margin: 0 auto;
+    }
+    
+    .seccion-diagrama-horizontal-maestra {
+        padding: 80px 4%;
+    }
+    
+    .eje-centrado-absoluto {
+        display: block;
+        width: 100%;
+        margin-top: 30px;
+    }
+    
+    .contenedor-flujo-lineal-horizontal {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        display: flex;
+        flex-direction: column;
+        gap: 35px;
+        position: relative;
+        padding-left: 25px;
+        border-left: 1px dashed rgba(255, 255, 255, 0.15) !important;
+    }
+    
+    .svg-flujo-continuo {
+        display: none !important;
+    }
+    
+    .hito-sistema {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        width: 100% !important;
+        margin-bottom: 0 !important;
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    }
+    
+    .hito-sistema::before {
+        content: '';
+        position: absolute;
+        left: -29px;
+        top: 6px;
+        width: 8px;
+        height: 8px;
+        background-color: var(--cyan);
+        box-shadow: 0 0 8px var(--cyan);
+        transform: rotate(45deg);
+        z-index: 10;
+    }
+    
+    .hito-sistema:nth-child(even)::before {
+        background-color: var(--magenta);
+        box-shadow: 0 0 8px var(--magenta);
+    }
+    
+    .hito-sistema:nth-child(3)::before {
+        background-color: var(--yellow);
+        box-shadow: 0 0 8px var(--yellow);
+    }
+    
+    .cuadrado-guia-camino {
+        display: none !important;
+    }
+    
+    .concepts-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    #riel-trayectoria-derecho {
+        display: none;
+    }
+}
+
+@media (max-width: 900px) {
+    .bloque-dos-columnas {
+        flex-direction: column;
+        gap: 40px;
+    }
+    
+    .columna-texto {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+    
+    .columna-render {
+        flex: 0 0 100%;
+        width: 100%;
+    }
+    
+    .contenedor-3d {
+        height: 400px;
+    }
+}
+
+@media (max-width: 768px) {
+    .franja-nav {
+        height: 70px;
+        justify-content: center !important;
+        padding: 0 !important;
+    }
+    
+    .nav-list {
+        gap: 20px;
+    }
+    
+    .nav-link {
+        font-size: 0.75rem;
+    }
+    
+    .fundamento-bloques {
+        grid-template-columns: 1fr;
+    }
+    
     .diagramas-comparativa {
         flex-direction: column !important;
+        gap: 40px;
         align-items: center;
-        gap: 8vh;
     }
-    .diagramas-comparativa .schema-box,
-    .pie-diagrama {
+    
+    .columna-diagrama {
+        width: 100%;
+        max-width: 480px;
+    }
+    
+    .concepts-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==========================================================
+   16. COMPONENTES DEL JUEGO & VISOR INTERACTIVO (SHOWROOM)
+   ========================================================== */
+.columna-render {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+}
+
+.showroom-wrapper {
+    width: 100%;
+    background-color: rgba(5, 5, 5, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 2px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    backdrop-filter: blur(10px);
+}
+
+.showroom-tabs {
+    display: flex;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding-bottom: 12px;
+}
+
+.showroom-tab {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.4);
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+}
+
+.showroom-tab.active {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.showroom-tab:hover:not(.active) {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.showroom-visor {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 24px;
+    min-height: 260px;
+    align-items: center;
+}
+
+.visor-display-box {
+    width: 100%;
+    height: 260px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border: 1px dashed rgba(255, 255, 255, 0.06);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    perspective: 1000px;
+}
+
+.visor-render-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-style: preserve-3d;
+}
+
+.visor-details {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    justify-content: center;
+}
+
+.visor-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #ffffff;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.visor-meta {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: var(--cyan);
+}
+
+.visor-description {
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: #aaaaaa;
+    margin: 0;
+}
+
+.visor-actions {
+    margin-top: 8px;
+}
+
+.btn-visor-action {
+    font-size: 10px;
+    padding: 8px 16px;
+    letter-spacing: 1px;
+}
+
+.showroom-thumbnails {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
+    padding-top: 16px;
+}
+
+.showroom-thumb {
+    flex: 0 0 54px;
+    height: 54px;
+    background-color: rgba(5, 5, 5, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 2px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 0.5;
+}
+
+.showroom-thumb:hover {
+    opacity: 0.8;
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.showroom-thumb.active {
+    opacity: 1;
+    border-color: var(--magenta);
+    background-color: rgba(255, 255, 255, 0.03);
+    box-shadow: 0 0 10px rgba(255, 0, 127, 0.15);
+}
+
+/* --- 3D CARD COMPONENT --- */
+.card-3d-wrapper {
+    width: 150px;
+    height: 215px;
+    perspective: 1000px;
+    cursor: pointer;
+    transform-style: preserve-3d;
+}
+
+.card-3d-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.15);
+}
+
+.card-3d-inner.flipped {
+    transform: rotateY(180deg);
+}
+
+.card-3d-front, .card-3d-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.card-3d-front {
+    background-color: #000000;
+    border: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+}
+
+.card-3d-tag {
+    font-family: 'Geist Mono', monospace;
+    font-size: 8px;
+    color: #e6ff00;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-align: center;
+    border-bottom: 1px solid rgba(230, 255, 0, 0.15);
+    padding-bottom: 4px;
+}
+
+.card-3d-shape {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 0;
+}
+
+.card-3d-info {
+    text-align: left;
+}
+
+.card-3d-title {
+    font-size: 10px;
+    font-weight: bold;
+    color: #ffffff;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+    letter-spacing: 1px;
+}
+
+.card-3d-text {
+    font-size: 6.8px;
+    line-height: 1.25;
+    color: #888888;
+    margin: 0;
+}
+
+.card-3d-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 4px;
+}
+
+.card-3d-icon-mini {
+    width: 16px;
+    height: 16px;
+}
+
+.card-3d-back {
+    background-color: #000000;
+    border: none;
+    transform: rotateY(180deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+}
+
+.card-back-pattern {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-back-logo {
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    font-weight: bold;
+    color: #ffffff;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    background: linear-gradient(180deg, var(--cyan), var(--magenta));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    opacity: 0.8;
+}
+
+/* --- TOKENS (COMODINES) --- */
+.token-3d-container {
+    width: 120px;
+    height: 120px;
+    position: relative;
+    transform-style: preserve-3d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.token-3d {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(20, 20, 25, 0.8), rgba(5, 5, 8, 1));
+    border: 3px solid var(--token-color, var(--cyan));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 
+        0 10px 25px rgba(0, 0, 0, 0.6),
+        inset 0 0 15px var(--token-color, var(--cyan)),
+        0 0 15px rgba(var(--token-color-rgb, 0, 170, 255), 0.3);
+    position: relative;
+}
+
+.token-3d::after {
+    content: '';
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    width: 90%;
+    height: 90%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.12) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.token-icon {
+    width: 44px;
+    height: 44px;
+    color: #ffffff;
+    filter: drop-shadow(0 0 4px var(--token-color, var(--cyan)));
+}
+
+.contenedor-video video {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* ==========================================================
+   17. CURSOR DE SISTEMA NORMAL
+   ========================================================== */
+/* El cursor del sistema normal ha sido restaurado */
+
+/* ==========================================================
+   18. ESTILOS DE LA EXPOSICIÓN DEL SISTEMA
+   ========================================================== */
+
+/* --- Traducción Conceptual (Del juego al sistema) --- */
+.traduccion-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    margin: 50px auto 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 720px;
+    text-align: center;
+}
+
+.traduccion-texto-intro {
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+}
+
+.traduccion-tabla {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Helper class to center section headers and content */
+.section-centered {
+    align-items: center !important;
+    text-align: center !important;
+}
+
+.section-centered .section-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center !important;
+    text-align: center !important;
+}
+
+.traduccion-fila {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.7);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.traduccion-fila:not(.header-fila):hover {
+    background-color: rgba(255, 255, 255, 0.02);
+    color: #ffffff;
+}
+
+.header-fila {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.3);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 12px;
+}
+
+.traduccion-texto-intro p {
+    text-align: center !important;
+}
+
+.trad-col {
+    flex: 1;
+}
+
+.traduccion-fila .trad-col:first-child {
+    text-align: right;
+    padding-right: 30px;
+}
+
+.traduccion-fila .trad-col:last-child {
+    text-align: left;
+    padding-left: 30px;
+}
+
+.trad-col.spacer-col {
+    flex: 0 0 60px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.trad-indicator {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: var(--cyan);
+    box-shadow: 0 0 8px var(--cyan);
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.traduccion-fila:nth-child(3) .trad-indicator { background-color: var(--magenta); box-shadow: 0 0 8px var(--magenta); }
+.traduccion-fila:nth-child(4) .trad-indicator { background-color: var(--yellow); box-shadow: 0 0 8px var(--yellow); }
+.traduccion-fila:nth-child(5) .trad-indicator { background-color: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+.traduccion-fila:nth-child(6) .trad-indicator { background-color: var(--magenta); box-shadow: 0 0 8px var(--magenta); }
+.traduccion-fila:nth-child(7) .trad-indicator { background-color: var(--yellow); box-shadow: 0 0 8px var(--yellow); }
+
+.traduccion-fila:hover .trad-indicator {
+    transform: scale(2);
+}
+
+.traduccion-esquema {
+    flex: 1;
+    max-width: 400px;
+    height: 320px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    background-color: rgba(5, 5, 5, 0.5);
+    border-radius: 2px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.svg-esquema-trad {
+    overflow: visible;
+}
+
+.anim-dot-trad {
+    animation: tradDotFlow 5s linear infinite;
+}
+
+@keyframes tradDotFlow {
+    0% { cx: 50px; }
+    100% { cx: 350px; }
+}
+
+/* --- Mecánica (Flujo Vertical) --- */
+.mecanica-vertical-container {
+    position: relative;
+    margin-top: 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    padding-left: 20px;
+}
+
+.mecanica-linea-conexion {
+    position: absolute;
+    left: 40px;
+    top: 20px;
+    bottom: 20px;
+    width: 1px;
+    border-left: 1px dashed rgba(255, 255, 255, 0.12);
+    z-index: 1;
+}
+
+.mecanica-etapa {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    background-color: rgba(5, 5, 5, 0.7);
+    border-radius: 2px;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+}
+
+.mecanica-etapa:hover {
+    border-color: rgba(0, 170, 255, 0.3);
+    background-color: rgba(0, 170, 255, 0.02);
+    transform: translateX(8px);
+    box-shadow: 0 5px 25px rgba(0, 170, 255, 0.04);
+}
+
+.mecanica-etapa:nth-child(odd):hover {
+    border-color: rgba(255, 0, 127, 0.3);
+    background-color: rgba(255, 0, 127, 0.02);
+    box-shadow: 0 5px 25px rgba(255, 0, 127, 0.04);
+}
+
+.mecanica-etapa:nth-child(3n):hover {
+    border-color: rgba(230, 255, 0, 0.3);
+    background-color: rgba(230, 255, 0, 0.02);
+    box-shadow: 0 5px 25px rgba(230, 255, 0, 0.04);
+}
+
+.etapa-circulo {
+    flex: 0 0 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background-color: #050505;
+    color: rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.mecanica-etapa:hover .etapa-circulo {
+    color: #ffffff;
+    border-color: var(--cyan);
+    box-shadow: 0 0 8px var(--cyan);
+}
+
+.mecanica-etapa:nth-child(odd):hover .etapa-circulo {
+    border-color: var(--magenta);
+    box-shadow: 0 0 8px var(--magenta);
+}
+
+.mecanica-etapa:nth-child(3n):hover .etapa-circulo {
+    border-color: var(--yellow);
+    box-shadow: 0 0 8px var(--yellow);
+}
+
+.etapa-contenido {
+    flex: 1;
+}
+
+.etapa-contenido h3 {
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+}
+
+.etapa-contenido p {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.4);
+    line-height: 1.5;
+    margin: 0;
+}
+
+.etapa-grafico {
+    flex: 0 0 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.35;
+    transition: opacity 0.3s ease, transform 0.4s ease;
+}
+
+.mecanica-etapa:hover .etapa-grafico {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+/* Micro-animaciones SVG */
+.anim-pulsar {
+    animation: microPulse 1.8s ease-in-out infinite alternate;
+}
+@keyframes microPulse {
+    0% { r: 3px; opacity: 0.4; }
+    100% { r: 5px; opacity: 1; filter: drop-shadow(0 0 3px var(--cyan)); }
+}
+
+.anim-rotar {
+    animation: microRotate 8s linear infinite;
+}
+@keyframes microRotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.anim-dibujo-linea {
+    stroke-dasharray: 80;
+    stroke-dashoffset: 80;
+    animation: microDraw 3s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+}
+@keyframes microDraw {
+    0% { stroke-dashoffset: 80; }
+    100% { stroke-dashoffset: 0; }
+}
+
+.anim-escalar {
+    animation: microScale 2.5s ease-in-out infinite alternate;
+}
+@keyframes microScale {
+    0% { transform: scale(0.9); }
+    100% { transform: scale(1.1); }
+}
+
+/* --- Cómo evoluciona el sistema --- */
+.evolucion-wrapper {
+    display: flex;
+    gap: 4vw;
+    margin-top: 50px;
+    align-items: stretch;
+}
+
+.evolucion-sidebar {
+    flex: 0 0 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+}
+
+.evolucion-step {
+    border-left: 2px solid rgba(255, 255, 255, 0.04);
+    padding-left: 20px;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 0.2;
+    transform: scale(0.98);
+    transform-origin: left center;
+}
+
+.evolucion-step.active {
+    opacity: 1;
+    border-left-color: var(--magenta);
+    transform: scale(1);
+}
+
+.evolucion-step-num {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--magenta);
+    display: block;
+    margin-bottom: 6px;
+}
+
+.evolucion-step h3 {
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+}
+
+.evolucion-step p {
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.4);
+    line-height: 1.5;
+    margin: 0;
+}
+
+.evolucion-controles {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 15px;
+}
+
+#evolucion-contador {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.evolucion-visor-container {
+    flex: 1;
+    height: 420px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 2px;
+    overflow: hidden;
+    background-color: #050505;
+}
+
+/* --- Fundamentos (Texto Explicativo Alineado) --- */
+.fundamento-texto-explicativo {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    margin-top: 60px;
+    width: 100%;
+    max-width: 800px;
+}
+
+.fundamento-item {
+    border-left: 2px solid rgba(230, 255, 0, 0.15);
+    padding-left: 24px;
+    transition: border-color 0.3s ease;
+}
+
+.fundamento-item:hover {
+    border-left-color: var(--yellow);
+}
+
+.fundamento-concept {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--yellow);
+    text-transform: uppercase;
+    margin: 0 0 10px 0;
+}
+
+.fundamento-para {
+    font-size: 0.98rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.65);
+    margin: 0;
+}
+
+/* --- Responsive Adaptability --- */
+@media (max-width: 1024px) {
+    .traduccion-wrapper {
+        flex-direction: column;
+        gap: 40px;
+        align-items: center;
+    }
+    .traduccion-texto-intro, .traduccion-tabla {
+        width: 100%;
         max-width: 100%;
     }
 }
 
+/* Custom cursor enabled */
 
-/* ==========================================================
-   13. DIAGRAMA CONCEPTUAL LOCOMOTIVE - LÍNEA DETRÁS DEL TEXTO PROTEGIDO
-   ========================================================== */
-.seccion-diagrama-locomotive {
-    width: 100% !important;
-    min-height: 140vh; 
-    background-color: #050505;
-    padding: 12vh 8vw;
+/* --- PREMIUM LIGHTBOX PHOTO VIEWER --- */
+.lightbox-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(5, 5, 5, 0.85);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    z-index: 10000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lightbox-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    font-size: 2.5rem;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    user-select: none;
+    z-index: 10002;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.lightbox-close:hover {
+    color: #ffffff;
+    background: rgba(255, 0, 127, 0.2);
+    border-color: var(--magenta);
+    box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);
+    transform: rotate(90deg);
+}
+
+.lightbox-content {
+    max-width: 90vw;
+    max-height: 85vh;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
     position: relative;
-    overflow: hidden;
-    box-sizing: border-box;
+    z-index: 10001;
 }
 
-/* Encabezado original */
-.seccion-diagrama-locomotive .section-header {
-    text-align: left !important;
-    width: 100%;
-    margin-bottom: 6vh;
+#lightbox-img {
+    max-width: 100%;
+    max-height: 70vh;
+    object-fit: contain;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
+    transform: scale(0.9);
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.seccion-diagrama-locomotive .section-title {
-    font-size: clamp(2.5rem, 6vw, 6rem); 
-    font-weight: 900; 
-    line-height: 0.95;
-    letter-spacing: -1px; 
-    text-transform: uppercase; 
-    text-align: left !important;
+.lightbox-overlay.active #lightbox-img {
+    transform: scale(1);
 }
 
-.seccion-diagrama-locomotive .magenta-text {
+.lightbox-caption {
+    margin-top: 20px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+    line-height: 1.6;
+    padding: 10px 20px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.lightbox-caption span {
     color: var(--magenta);
-    display: block; 
+    font-weight: 500;
 }
 
-/* Contenedor del circuito interactivo */
-.seccion-diagrama-locomotive .contenedor-flujo-lineal {
+.lightbox-caption strong {
+    color: var(--cyan);
+    font-size: 13px;
+    display: inline-block;
+    margin-top: 4px;
+}
+
+/* --- ANIMATED 3D FLOATING PIECES IN HERO --- */
+.contenedor-3d-hero {
+    width: 420px;
+    height: 420px;
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: relative;
-    width: 100%;
-    max-width: 1050px;
-    height: 900px;
-    margin-top: 2vh;
+    perspective: 1200px;
+    transform-style: preserve-3d;
 }
 
-/* SOLUCIÓN AL ENREDO: Bajamos el z-index del SVG a 1 para que corra por DETRÁS */
-.seccion-diagrama-locomotive .svg-flujo-continuo {
+/* Canvas de cuadritos y conexiones (Estilo Exploración) */
+#hero-canvas {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1; 
+    z-index: 1;
     pointer-events: none;
-}
-
-/* Animación de la línea en loop */
-.seccion-diagrama-locomotive .linea-bucle-animada {
-    fill: none;
-    stroke: var(--cyan);
-    stroke-width: 3px;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke-dasharray: 1200;
-    stroke-dashoffset: 1200;
-    animation: flujoCircuitoContinuo 8s linear infinite;
-    filter: drop-shadow(0 0 5px rgba(0, 170, 255, 0.4));
-}
-
-@keyframes flujoCircuitoContinuo {
-    0% { stroke-dashoffset: 1200; }
-    50% { stroke-dashoffset: 0; }
-    100% { stroke-dashoffset: -1200; }
-}
-
-.seccion-diagrama-locomotive .punto-nodo {
-    opacity: 0.8;
-}
-
-/* NODOS TIPOGRÁFICOS CON ESCUDO PROTECTOR ANTE LA LÍNEA */
-.seccion-diagrama-locomotive .hito-sistema {
-    position: absolute;
-    /* Subimos el z-index a 2 para que el texto esté siempre por ENCIMA de la línea */
-    z-index: 2; 
-    max-width: 260px;
-    
-    /* TRUCO TÉCNICO: Le damos un fondo del mismo color oscuro que tu página (#050505) 
-       y un margen interno (padding). Esto actúa como un 'borrador' invisible:
-       si la línea pasa por abajo, el fondo negro la tapa limpiamente y no toca las letras.
-    */
-    background-color: #050505 !important; 
-    padding: 10px 15px !important; 
-    border-radius: 4px;
-    
-    border: none !important;
-    box-shadow: none !important;
-    text-align: left !important;
-    transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-
-.seccion-diagrama-locomotive .numero-hito {
-    font-family: monospace;
-    font-size: 0.75rem;
-    color: var(--magenta);
     display: block;
-    margin-bottom: 4px;
-    font-weight: bold;
 }
 
-.seccion-diagrama-locomotive .hito-sistema h3 {
-    font-size: 1.25rem;
-    font-weight: 900;
-    color: #ffffff;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-    letter-spacing: -0.5px;
+.floating-pieces-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 3; /* Render in front of the box */
+    transform-style: preserve-3d;
 }
 
-.seccion-diagrama-locomotive .hito-sistema p {
-    font-size: 0.82rem;
-    color: #888;
-    line-height: 1.4;
-    transition: color 0.3s ease;
+.floating-piece {
+    position: absolute;
+    width: 65px;
+    height: 65px;
+    top: 50%;
+    left: 50%;
+    margin-top: -32.5px;
+    margin-left: -32.5px;
+    transform-style: preserve-3d;
 }
 
-/* Hover de realce */
-.seccion-diagrama-locomotive .hito-sistema:hover {
-    transform: scale(1.04) translateY(-2px);
+/* Layering SVGs to create 3D extrusion thickness */
+.floating-piece-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    fill: none;
+    transform-style: preserve-3d;
 }
 
-.seccion-diagrama-locomotive .hito-sistema:hover p {
-    color: #ffffff; 
+/* Z-Offsets for extruded layers */
+.floating-piece-layer:nth-child(1) { transform: translateZ(-3px); opacity: 0.15; }
+.floating-piece-layer:nth-child(2) { transform: translateZ(-1.5px); opacity: 0.4; }
+.floating-piece-layer:nth-child(3) { transform: translateZ(0px); opacity: 1.0; }
+.floating-piece-layer:nth-child(4) { transform: translateZ(1.5px); opacity: 0.4; }
+.floating-piece-layer:nth-child(5) { transform: translateZ(3px); opacity: 0.15; }
+
+/* Individual pieces animations (Synchronized 12s loop) */
+.piece-t-3d {
+    animation: floatAnimT 12s infinite ease-in-out;
 }
 
-/* Adaptación responsive */
-@media (max-width: 850px) {
-    .seccion-diagrama-locomotive .contenedor-flujo-lineal { height: auto; display: flex; flex-direction: column; gap: 50px; }
-    .seccion-diagrama-locomotive .svg-flujo-continuo { display: none; }
-    .seccion-diagrama-locomotive .hito-sistema { position: relative !important; top: auto !important; left: auto !important; max-width: 100%; padding: 0 !important; }
+.piece-l-g-3d {
+    animation: floatAnimLG 12s infinite ease-in-out;
+}
+
+.piece-recta-c-3d {
+    animation: floatAnimRC 12s infinite ease-in-out;
+}
+
+.piece-l-c-3d {
+    animation: floatAnimLC 12s infinite ease-in-out;
+}
+
+/* 3D Keyframe Animations: Gather at center, disperse outward, return to center */
+@keyframes floatAnimT {
+    0% {
+        transform: translate3d(-20px, -20px, 0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+    }
+    20% {
+        transform: translate3d(-20px, -20px, 0px) rotateX(10deg) rotateY(10deg) rotateZ(5deg);
+    }
+    50% {
+        transform: translate3d(-170px, -170px, 80px) rotateX(180deg) rotateY(90deg) rotateZ(45deg);
+    }
+    75% {
+        transform: translate3d(-180px, -160px, 90px) rotateX(270deg) rotateY(180deg) rotateZ(90deg);
+    }
+    100% {
+        transform: translate3d(-20px, -20px, 0px) rotateX(360deg) rotateY(360deg) rotateZ(360deg);
+    }
+}
+
+@keyframes floatAnimLG {
+    0% {
+        transform: translate3d(20px, 20px, 0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+    }
+    20% {
+        transform: translate3d(20px, 20px, 0px) rotateX(-5deg) rotateY(-10deg) rotateZ(-5deg);
+    }
+    50% {
+        transform: translate3d(170px, 170px, 100px) rotateX(-180deg) rotateY(-90deg) rotateZ(-135deg);
+    }
+    75% {
+        transform: translate3d(180px, 180px, 110px) rotateX(-270deg) rotateY(-180deg) rotateZ(-225deg);
+    }
+    100% {
+        transform: translate3d(20px, 20px, 0px) rotateX(-360deg) rotateY(-360deg) rotateZ(-360deg);
+    }
+}
+
+@keyframes floatAnimRC {
+    0% {
+        transform: translate3d(30px, -25px, 0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+    }
+    20% {
+        transform: translate3d(30px, -25px, 0px) rotateX(5deg) rotateY(10deg) rotateZ(-10deg);
+    }
+    50% {
+        transform: translate3d(170px, -170px, 60px) rotateX(-90deg) rotateY(180deg) rotateZ(-45deg);
+    }
+    75% {
+        transform: translate3d(180px, -160px, 70px) rotateX(-180deg) rotateY(270deg) rotateZ(-90deg);
+    }
+    100% {
+        transform: translate3d(30px, -25px, 0px) rotateX(360deg) rotateY(360deg) rotateZ(360deg);
+    }
+}
+
+@keyframes floatAnimLC {
+    0% {
+        transform: translate3d(-25px, 30px, 0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+    }
+    20% {
+        transform: translate3d(-25px, 30px, 0px) rotateX(10deg) rotateY(5deg) rotateZ(10deg);
+    }
+    50% {
+        transform: translate3d(-170px, 170px, 40px) rotateX(90deg) rotateY(-180deg) rotateZ(135deg);
+    }
+    75% {
+        transform: translate3d(-180px, 180px, 50px) rotateX(180deg) rotateY(-270deg) rotateZ(225deg);
+    }
+    100% {
+        transform: translate3d(-25px, 30px, 0px) rotateX(360deg) rotateY(360deg) rotateZ(360deg);
+    }
+}
+
+/* Hide floating pieces on tablet and mobile to optimize space and rendering performance */
+@media (max-width: 1024px) {
+    .floating-pieces-container {
+        display: none !important;
+    }
 }

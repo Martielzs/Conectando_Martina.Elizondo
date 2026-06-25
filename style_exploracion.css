@@ -1,3 +1,7 @@
+/* ==========================================================================
+   STYLE EXPLORACION - ENTORNO GENERATIVO CONTINUO
+   ========================================================================== */
+
 * {
     margin: 0;
     padding: 0;
@@ -10,6 +14,9 @@ body, html {
     overflow: hidden;
     background-color: #030303;
     cursor: crosshair;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 canvas {
@@ -20,4 +27,91 @@ canvas {
     height: 100%;
     display: block;
     z-index: 1;
+}
+
+/* MENSAJE DE INDICACIÓN INICIAL */
+.hint-text {
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    font-size: 13px;
+    letter-spacing: 4px;
+    text-transform: lowercase;
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+    pointer-events: none;
+    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    white-space: nowrap;
+}
+
+.hint-text.fade-out {
+    opacity: 0;
+}
+
+/* HUD DE CONTROLES Y ESTADO */
+.hud-container {
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    right: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+    pointer-events: none;
+    font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35);
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+}
+
+.hud-container.visible {
+    opacity: 1;
+}
+
+.hud-left {
+    display: flex;
+    gap: 30px;
+}
+
+.hud-item {
+    display: flex;
+    gap: 8px;
+}
+
+.hud-label {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.hud-value {
+    color: #ffffff;
+    font-weight: bold;
+    text-shadow: 0 0 6px rgba(255, 255, 255, 0.2);
+    transition: color 0.4s ease, text-shadow 0.4s ease;
+}
+
+.hud-legend {
+    color: rgba(255, 255, 255, 0.25);
+    font-size: 9px;
+    letter-spacing: 1px;
+}
+
+@media (max-width: 900px) {
+    .hud-container {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+        bottom: 20px;
+        left: 20px;
+        right: 20px;
+    }
+    .hud-left {
+        flex-direction: column;
+        gap: 6px;
+    }
 }
