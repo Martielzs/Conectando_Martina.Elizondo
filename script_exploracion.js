@@ -99,21 +99,13 @@ function inicializarAudio() {
         droneFilter.frequency.setValueAtTime(140, audioCtx.currentTime);
         droneFilter.Q.setValueAtTime(4, audioCtx.currentTime);
         
-        droneGain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+        droneGain.gain.setValueAtTime(0, audioCtx.currentTime); // Silenciado completamente
         
         droneOsc.connect(droneFilter);
         droneFilter.connect(droneGain);
         droneGain.connect(audioCtx.destination);
         
-        droneOsc.start();
-        
-        setInterval(() => {
-            if (audioCtx && droneFilter && currentStep !== 6) {
-                const now = audioCtx.currentTime;
-                const baseFreq = 130 + 35 * Math.sin(now * 0.35);
-                droneFilter.frequency.setTargetAtTime(baseFreq, now, 0.8);
-            }
-        }, 1000);
+        droneOsc.start(); // Iniciado silencioso
     } catch (e) {
         console.error("AudioContext no soportado:", e);
     }
@@ -497,6 +489,16 @@ function transitionToStep(nextStep) {
             hud.classList.remove('visible');
         }
     }
+
+    // Toggle de visibilidad del botón "Volver al inicio"
+    const btnVolver = document.getElementById('btn-volver-landing');
+    if (btnVolver) {
+        if (nextStep === 8) {
+            btnVolver.classList.add('visible');
+        } else {
+            btnVolver.classList.remove('visible');
+        }
+    }
 }
 
 // --- ACTUALIZACIÓN DE HUD MINIMALISTA ---
@@ -557,7 +559,7 @@ window.addEventListener('mousemove', (e) => {
         totalMouseVel += vel;
     }
     
-    // Condición Paso 5: Carga de tensión cinética por velocidad
+    // Condición Paso 5: Carga de tensión cinética por velocidad (auto-avanza al completar)
     if (currentStep === 5 && vel > 8.0) {
         systemTension += vel * 0.0055;
         if (systemTension >= 1.0) {
@@ -595,9 +597,9 @@ window.addEventListener('click', (e) => {
         const sqX = w / 2;
         const sqY = h / 2;
         if (Math.hypot(mx - sqX, my - sqY) < 65) {
-            // Asegurar que el drone gane volumen al iniciar
+            // Asegurar que el drone permanezca silenciado
             if (droneGain && audioCtx) {
-                droneGain.gain.setTargetAtTime(0.04, audioCtx.currentTime, 0.5);
+                droneGain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.5);
             }
             // Explosión de partículas desde el centro
             nodes.forEach(n => {
@@ -611,7 +613,6 @@ window.addEventListener('click', (e) => {
         }
     }
     
-    // Condición Paso 6: Colocar anclajes estructurales
     else if (currentStep === 6) {
         if (anchors.length < 3) {
             const anchorColor = ORIGINAL_COLORS[anchors.length % ORIGINAL_COLORS.length];
@@ -686,7 +687,7 @@ window.addEventListener('keydown', (e) => {
         }
     }
     
-    // Avanzar de etapa con Enter
+    // Avanzar de etapa con Enter (Control de flujo manual del usuario)
     if (e.key === 'Enter') {
         e.preventDefault();
         if (currentStep === 1) {
@@ -697,6 +698,16 @@ window.addEventListener('keydown', (e) => {
             transitionToStep(4);
         } else if (currentStep === 4) {
             transitionToStep(5);
+        } else if (currentStep === 5) {
+            transitionToStep(6);
+        } else if (currentStep === 6) {
+            transitionToStep(7);
+        } else if (currentStep === 7) {
+            // Forzar la sintonización final
+            spacePressed = false;
+            selectedWord = "CONECTANDO";
+            playthroughCount++;
+            activarPalabraEmergente();
         }
     }
 
@@ -719,7 +730,7 @@ window.addEventListener('wheel', (e) => {
         e.preventDefault();
         polarizationFactor = Math.min(1.0, polarizationFactor + 0.08);
         if (polarizationFactor >= 1.0) {
-            transitionToStep(6); // avanzar a Cristalizar
+            transitionToStep(6);
         }
     }
 }, { passive: false });
@@ -732,6 +743,12 @@ function activarPalabraEmergente() {
     mapNodesToWord();
     
     playEvolutionChangeChime(2);
+    
+    // Apagar el sonido final (droneGain) al aparecer la palabra
+    if (droneGain && audioCtx) {
+        droneGain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.4);
+    }
+    
     transitionToStep(8);
 }
 
@@ -767,6 +784,21 @@ function updatePhysics() {
             totalDragTicks++;
         }
     }
+    
+    // Incrementar o resetear contador de inactividad del mouse
+    if (mx === pmx && my === pmy) {
+        stillTicks++;
+    } else {
+        stillTicks = 0;
+    }
+
+    // Al dejar el cursor quieto en Paso 2, los nodos se vuelven a unir lentamente al centro
+    if (currentStep === 2 && stillTicks > 10) {
+        nodes.forEach(n => {
+            n.vx += (w / 2 - n.x) * 0.002;
+            n.vy += (h / 2 - n.y) * 0.002;
+        });
+    }
 
     // Tensionar (Paso 4) responde dinámicamente al movimiento del ratón sin decaimiento forzado
     if (currentStep === 4) {
@@ -790,6 +822,9 @@ function updatePhysics() {
                 n.vx += (w * 0.5 - n.x) * 0.04 * polarizationFactor;
                 n.vy += (h * 0.5 - n.y) * 0.02 * polarizationFactor;
             }
+            // Dispersión constante lenta
+            n.vx += (Math.random() - 0.5) * 0.35;
+            n.vy += (Math.random() - 0.5) * 0.35;
         });
     }
 
@@ -831,13 +866,13 @@ function updatePhysics() {
                 n.vy += (Math.random() - 0.5) * resonanceCharge * 2.8;
             });
             
-            // Modulación de sonido crescendo en el drone
+            // Modulación de sonido crescendo en el drone (Crescendo final)
             if (audioCtx && droneOsc) {
                 const pitchShift = resonanceCharge * 180;
                 const baseFreq = 50 + nodes.length * 0.35 + pitchShift;
                 droneOsc.frequency.setValueAtTime(baseFreq, audioCtx.currentTime);
                 if (droneGain) {
-                    droneGain.gain.setValueAtTime(0.04 + resonanceCharge * 0.06, audioCtx.currentTime);
+                    droneGain.gain.setValueAtTime(resonanceCharge * 0.08, audioCtx.currentTime);
                 }
                 if (droneFilter) {
                     droneFilter.frequency.setValueAtTime(140 + resonanceCharge * 400, audioCtx.currentTime);
@@ -846,23 +881,16 @@ function updatePhysics() {
             
             if (resonanceCharge >= 1.0) {
                 spacePressed = false;
-                if (playthroughCount === 0) {
-                    selectedWord = "CONECTANDO";
-                } else if (playthroughCount === 1) {
-                    selectedWord = "SISTEMAS";
-                } else {
-                    selectedWord = classifyJourney();
-                }
+                selectedWord = "CONECTANDO"; // Siempre dice CONECTANDO
                 playthroughCount++;
                 activarPalabraEmergente();
             }
         } else {
             resonanceCharge = Math.max(0.0, resonanceCharge - 0.01);
-            // Restaurar sonido normal
+            // Restaurar sonido normal (No silenciar el drone aquí, se apaga al aparecer la palabra)
             if (audioCtx) {
                 const baseFreq = 50 + nodes.length * 0.35;
                 if (droneOsc) droneOsc.frequency.setTargetAtTime(baseFreq, audioCtx.currentTime, 0.5);
-                if (droneGain) droneGain.gain.setTargetAtTime(0.04, audioCtx.currentTime, 0.5);
                 if (droneFilter) droneFilter.frequency.setTargetAtTime(140, audioCtx.currentTime, 0.5);
             }
         }
@@ -915,6 +943,15 @@ function updatePhysics() {
             const dx = n2.x - n1.x;
             const dy = n2.y - n1.y;
             const dist = Math.hypot(dx, dy);
+
+            // Dispersión instantánea lenta en Paso 5
+            if (currentStep === 5 && dist < 150) {
+                const force = (150 - dist) / 150;
+                n1.vx -= (dx / dist) * force * 0.08;
+                n1.vy -= (dy / dist) * force * 0.08;
+                n2.vx += (dx / dist) * force * 0.08;
+                n2.vy += (dy / dist) * force * 0.08;
+            }
 
             if (activeBehavior === 1 && dist < 85) {
                 const force = (85 - dist) / 85;

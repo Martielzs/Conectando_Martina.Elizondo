@@ -115,3 +115,39 @@ canvas {
         gap: 6px;
     }
 }
+
+/* BOTÓN VOLVER AL LANDING */
+.btn-volver-landing {
+    position: absolute;
+    top: 85%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #ffffff;
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 14px 28px;
+    text-decoration: none;
+    border-radius: 2px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.btn-volver-landing.visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.btn-volver-landing:hover {
+    background-color: #ffffff;
+    color: #030303;
+    border-color: #ffffff;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+}

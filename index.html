@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -38,8 +38,8 @@
         </ul>
     </nav>
 
-    <!-- HERO SECTION (Estilo Arcturis con anti-títulos y botones de acción) -->
-    <header class="hero" id="slide-hero">
+        <!-- HERO SECTION (Estilo Arcturis con anti-títulos y botones de acción) -->
+        <header class="hero" id="slide-hero">
         <div class="hero-left" style="position: relative; z-index: 2;">
             <span class="preheading reveal">// CONEXIÓN • EVOLUCIÓN • TRAYECTORIA</span>
             <div class="mega-title">
@@ -112,7 +112,6 @@
     <!-- SECCIÓN 01: ¿QUÉ ES CONECTANDO? -->
     <section id="que-es" class="section scroll-section">
         <div class="section-header reveal">
-            <span class="preheading">// 01 • EL PROYECTO ORIGINAL</span>
             <h2 class="section-title">¿QUÉ ES<br><span class="magenta-text">CONECTANDO?</span></h2>
         </div>
 
@@ -124,7 +123,7 @@
             </div>
 
             <div class="columna-render reveal">
-                <div class="contenedor-3d">
+                <div class="contenedor-3d" style="position: relative;">
                     <model-viewer
                         id="caja-interactive-3d"
                         src="modelado/modelado_caja_6.glb"
@@ -142,6 +141,22 @@
                             Ver en realidad aumentada
                         </button>
                     </model-viewer>
+                    <!-- Indicador de Manito Interactiva (Gesture Prompt) -->
+                    <div class="interactive-gesture-prompt" id="model-gesture-prompt">
+                        <svg viewBox="0 0 100 100" class="gesture-hand-svg">
+                            <!-- Curved double-headed arrow for rotation -->
+                            <path d="M 25 35 A 30 30 0 0 1 75 35" fill="none" stroke="var(--cyan)" stroke-width="3" stroke-dasharray="4 4" stroke-linecap="round"/>
+                            <path d="M 22 38 L 25 31 L 32 34" fill="none" stroke="var(--cyan)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M 78 38 L 75 31 L 68 34" fill="none" stroke="var(--cyan)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                            
+                            <!-- Hand pointing finger -->
+                            <g class="hand-icon-drag">
+                                <path d="M 46 65 C 46 65 37 60 32 55 C 27 50 29 44 34 44 C 39 44 43 50 45 53 V 25 C 45 21 51 21 51 25 V 45 C 51 45 53 40 58 40 C 63 40 65 45 61 50 C 57 55 48 65 48 65" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M 47 65 V 80 H 57 V 65" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linejoin="round"/>
+                            </g>
+                        </svg>
+                        <span class="gesture-text">// INTERACTIVO: ARRASTRA PARA ROTAR</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -195,7 +210,6 @@
     <!-- SECCIÓN: COMPONENTES DEL JUEGO -->
     <section id="componentes" class="section">
         <div class="section-header reveal">
-            <span class="preheading">// 02 • ELEMENTOS FÍSICOS</span>
             <h2 class="section-title">COMPONENTES<br><span class="magenta-text">DEL JUEGO</span></h2>
         </div>
 
@@ -206,7 +220,7 @@
                 
                 <div class="contenedor-video reveal" style="margin-top: 30px; width: 100%;">
                     <video id="video-componentes" controls poster="imagenes/imagen_contenedor_1.png" style="width: 100%; border: 1px solid rgba(255, 255, 255, 0.08); background-color: #000; aspect-ratio: 16/9; display: block; border-radius: 2px;">
-                        <source src="modelado/video_demo.mp4" type="video/mp4">
+                        <source src="video/0629.mp4" type="video/mp4">
                         Tu navegador no soporta la reproducción de video.
                     </video>
                 </div>
@@ -252,7 +266,6 @@
     <!-- SECCIÓN 03: MECÁNICA (Diagrama Animado Original) -->
     <section id="mecanica" class="section scroll-section seccion-mecanica-vertical">
         <div class="section-header reveal">
-            <span class="section-number">02. MECÁNICA DEL JUEGO</span>
             <h2 class="section-title">Construir<br>para <span class="cyan">avanzar</span></h2>
         </div>
         <p class="section-text text-mecanica-ancho reveal">La partida comienza desde un punto central del tablero hacia las metas ubicadas en las esquinas. Si al completar una trayectoria los equipos descubren que la salida elegida no es la correcta, las estructuras construidas se mantienen: el juego exige transformar el sistema y generar una nueva ramificación continuando desde el camino previo para alcanzar el objetivo válido.</p>
@@ -307,12 +320,11 @@
 
     <!-- SECCIÓN 04: DEL JUEGO AL SISTEMA -->
     <section id="del-juego-al-sistema" class="section scroll-section section-centered">
-        <div class="section-header reveal">
-            <span class="preheading">// TRANSICIÓN CONCEPTUAL</span>
+        <div class="section-header">
             <h2 class="section-title">Más allá<br><span class="cyan">del tablero</span></h2>
         </div>
 
-        <div class="traduccion-wrapper reveal">
+        <div class="traduccion-wrapper">
             <div class="traduccion-texto-intro">
                 <p class="section-text" style="font-size: 1.3rem;">La exploración se enfoca en las relaciones y trayectorias que emergen de la interacción.</p>
             </div>
@@ -358,25 +370,50 @@
             <h2 class="section-title"><span class="yellow-text">FUNDAMENTO</span></h2>
         </div>
 
-        <div class="fundamento-texto-explicativo reveal">
-            <div class="fundamento-item">
-                <h3 class="fundamento-concept">// EXPLORACIÓN</h3>
-                <p class="fundamento-para">La exploración en Conectando va más allá de recorrer un espacio preexistente; el entorno se devela y se co-construye activamente a través de las decisiones de los jugadores. Cada pieza colocada expande el territorio visible y redefine la orientación de la búsqueda, convirtiendo al jugador en un creador activo de la trayectoria.</p>
+        <div class="fundamento-content reveal">
+            <!-- Bloque Superior: Introducción en Texto Uniforme -->
+            <div class="fundamento-intro">
+                <p class="section-text">
+                    Este proyecto <strong>abstrae el juego físico</strong> materializando sus conceptos directamente en el tablero. El entorno no viene predefinido, sino que se <strong>construye gradualmente</strong> con las acciones del jugador.
+                </p>
+                <p class="section-text">
+                    Las piezas aisladas no significan nada; es su <strong>conexión interactiva</strong> la que altera el estado del sistema, revelando caminos ocultos y transformando el trayecto en una <strong>estructura viva, dinámica y progresiva</strong>.
+                </p>
             </div>
             
-            <div class="fundamento-item">
-                <h3 class="fundamento-concept">// TRANSFORMACIÓN</h3>
-                <p class="fundamento-para">La transformación es el motor dinámico del juego: el tablero no es una superficie estática, sino una red de relaciones en constante cambio. Un solo movimiento puede abrir salidas inesperadas o clausurar trayectorias completas, forzando a los equipos a reconfigurar su estrategia en tiempo real.</p>
-            </div>
-            
-            <div class="fundamento-item">
-                <h3 class="fundamento-concept">// INCERTIDUMBRE</h3>
-                <p class="fundamento-para">La incertidumbre define la experiencia del recorrido, donde las salidas reales y falsas permanecen ocultas y los flujos de conexión cambian con cada turno. El avance no sigue un plan rígido, sino que emerge de la adaptación continua y la reorganización de los caminos frente a la imprevisibilidad del mazo.</p>
-            </div>
-
-            <div class="fundamento-item">
-                <h3 class="fundamento-concept">// EMERGENCIA</h3>
-                <p class="fundamento-para">La emergencia se manifiesta cuando el comportamiento global de la red supera la suma de sus movimientos individuales. A partir de reglas sencillas de colocación y de la interacción de los jugadores, se auto-organiza un sistema complejo en el tablero, revelando patrones de orden colectivo que trascienden las intenciones iniciales de cada dupla.</p>
+            <!-- Bloque Inferior: Fila de los Cuatro Conceptos Clave -->
+            <div class="fundamento-conceptos-row">
+                <!-- Concepto 1: Exploración -->
+                <div class="concepto-card">
+                    <h3 class="concepto-title">// EXPLORACIÓN</h3>
+                    <p class="concepto-text">
+                        Es el proceso de <strong>descubrir cómo se forman los caminos</strong>: el jugador reconoce <strong>nuevas posibilidades</strong> al interactuar con las piezas y ampliar el recorrido.
+                    </p>
+                </div>
+                
+                <!-- Concepto 2: Transformación -->
+                <div class="concepto-card">
+                    <h3 class="concepto-title">// TRANSFORMACIÓN</h3>
+                    <p class="concepto-text">
+                        Es el <strong>cambio progresivo del sistema</strong>: los componentes se conectan y generan <strong>nuevas configuraciones</strong>, modificando la estructura constantemente.
+                    </p>
+                </div>
+                
+                <!-- Concepto 3: Incertidumbre -->
+                <div class="concepto-card">
+                    <h3 class="concepto-title">// INCERTIDUMBRE</h3>
+                    <p class="concepto-text">
+                        Aparece al <strong>no poder prever el mapa final</strong>: cada decisión <strong>abre y cierra caminos</strong> de forma simultánea, volviendo inestable el recorrido.
+                    </p>
+                </div>
+                
+                <!-- Concepto 4: Configuración -->
+                <div class="concepto-card">
+                    <h3 class="concepto-title">// CONFIGURACIÓN</h3>
+                    <p class="concepto-text">
+                        Es la <strong>organización temporal del sistema</strong>: el resultado momentáneo de cómo se conectan las piezas, creando un <strong>tablero distinto</strong> en cada partida.
+                    </p>
+                </div>
             </div>
         </div>
     </section>
@@ -384,7 +421,6 @@
     <!-- SECCIÓN 06: CONCEPTOS (Red Semántica) -->
     <section id="mapa-relaciones" class="section scroll-section">
         <div class="section-header reveal">
-            <span class="preheading">// INTERFAZ CONCEPTUAL</span>
             <h2 class="section-title">RED DE<br><span class="magenta-text">CONCEPTOS</span></h2>
         </div>
 
@@ -398,8 +434,7 @@
     <section id="cierre" class="section scroll-section" style="min-height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; text-align: left; position: relative; overflow: hidden;">
         <canvas id="cierre-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; opacity: 0.35;"></canvas>
         
-        <div class="cierre-content reveal" style="position: relative; z-index: 2; width: 100%; max-width: 900px;">
-            <span class="preheading">// TRANSICIÓN AL SISTEMA</span>
+        <div class="cierre-content" style="position: relative; z-index: 2; width: 100%; max-width: 900px;">
             <h2 class="section-title" style="max-width: 100%; font-size: clamp(1.8rem, 4vw, 4rem); margin-bottom: 4vh; text-align: left; line-height: 1.35; text-transform: none;">
                 Lo que en el juego aparece como conexión entre piezas, en la exploración se transforma en un sistema dinámico de relaciones.
             </h2>
@@ -407,6 +442,28 @@
             <a href="exploracion.html" id="btn-ingresar-exploracion" class="btn-outline btn-massive-outline" style="margin-top: 20px; display: inline-block;">Ingresar a la exploración</a>
         </div>
     </section>
+
+    <!-- FOOTER EDITORIAL Y CRÉDITOS (PREMIUM UX PORTFOLIO) -->
+    <footer class="footer-editorial">
+        <div class="footer-inner">
+            <!-- Bloque Izquierdo: Información del Proyecto y Autoría (Exactamente 3 Líneas) -->
+            <div class="footer-left">
+                <p class="footer-line-1">Conectando — Reinterpretación del juego físico</p>
+                <p class="footer-line-2">Desarrollado por Martina Elizondo Salazar</p>
+                <p class="footer-line-3">Taller de Diseño de Interacción 2026</p>
+                <p class="footer-line-4">Escuela de Arquitectura y Diseño • Pontificia Universidad Católica de Valparaíso</p>
+            </div>
+            
+            <!-- Bloque Derecho: Logos Institucionales en Espejo -->
+            <div class="footer-right">
+                <div class="footer-logo-container">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/PUCV_Escudo2016.svg" alt="Logo PUCV" class="logo-color-pucv">
+                    <span class="footer-logo-divider"></span>
+                    <img src="https://wiki-ead.b-cdn.net/images/e/e1/Ead_logo_fondo_2019_color.png" alt="Logo e[ad]" class="logo-color-ead">
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <!-- Visualizador Lightbox de Galería de Alta Gama -->
     <div id="galeria-lightbox" class="lightbox-overlay">
@@ -416,6 +473,10 @@
             <div id="lightbox-caption" class="lightbox-caption"></div>
         </div>
     </div>
+
+    <!-- GSAP & ScrollTrigger for Sticky layouts, Section Stacking, and Parallax -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
     <script src="script.js"></script>
 </body>

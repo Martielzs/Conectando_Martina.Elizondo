@@ -17,18 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
     /* --- 1. CURSOR DE SISTEMA RESTAURADO --- */
     // El cursor del sistema normal ha sido restaurado y se maneja por defecto.
 
-    /* --- 2. REVELACIÓN AL HACER SCROLL (Aparece una sola vez y se queda) --- */
-    const reveals = document.querySelectorAll(".reveal");
-    const revealObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add("active");
-                observer.unobserve(entry.target);
-            }
-        });
-    }, { root: null, rootMargin: "-5% 0px -5% 0px", threshold: 0.15 });
-
-    reveals.forEach(reveal => revealObserver.observe(reveal));
+    /* --- 2. REVELACIÓN AL HACER SCROLL (Gestionado por GSAP ScrollTrigger en Módulo 10) --- */
 
     /* --- 2. MOSTRAR FRANJA DE NAVEGACIÓN --- */
     const sections = document.querySelectorAll(".scroll-section");
@@ -106,7 +95,6 @@ document.addEventListener("DOMContentLoaded", function () {
 /* ==========================================================
    INTERACTIVIDAD DE LA EXPOSICIÓN DEL SISTEMA
    ========================================================== */
-
 document.addEventListener("DOMContentLoaded", () => {
     // Inicializar todos los módulos visuales interactivos
     initConceptosCanvas();
@@ -117,11 +105,9 @@ document.addEventListener("DOMContentLoaded", () => {
     initGaleriaTilt();
     initGaleriaLightbox();
     initHeroCanvas();
+    initModelViewerGesturePrompt();
+    initSmoothScroll();
 });
-
-
-
-
 
 /* --- MÓDULO 4: CONCEPTOS SEMANTIC CANVAS --- */
 function initConceptosCanvas() {
@@ -431,7 +417,7 @@ function initFondoCuadradosScroll() {
     const container = document.getElementById("fondo-cuadrados-scroll");
     if (!container) return;
     
-    const numSquares = 40;
+    const numSquares = 45; // Más cantidad ya que son muy pequeños e imperceptibles
     const squaresData = [];
     const colors = ["#00aaff", "#ff007f", "#e6ff00"];
     
@@ -446,38 +432,76 @@ function initFondoCuadradosScroll() {
     ) || 6000;
     
     for (let i = 0; i < numSquares; i++) {
+        // Envoltura para el efecto de traducción combinada (scroll + mouse)
+        const wrapper = document.createElement("div");
+        wrapper.className = "parallax-wrapper";
+        
         const sq = document.createElement("div");
         sq.className = "cuadradito-petit";
         
-        // Atributos aleatorios
-        const size = Math.random() * 5 + 3; // de 3px a 8px
-        const left = Math.random() * 100; // 0% a 100% de ancho
-        // Distribuir a lo largo de toda la página en píxeles
+        // Dimensiones microscópicas (para que casi no se noten)
+        const size = Math.random() * 7 + 3; // de 3px a 10px
+        const left = Math.random() * 100; // 0% a 100%
         const topPx = Math.random() * docHeight; 
-        const factor = Math.random() * 0.35 + 0.15; // factor de paralaje entre 0.15 y 0.50
+        const factor = Math.random() * 0.45 + 0.15; // Factor de profundidad
         const color = colors[Math.floor(Math.random() * colors.length)];
         
+        // Ubicar contenedor base en el documento
+        wrapper.style.left = `${left}%`;
+        wrapper.style.top = `${topPx}px`;
+        
+        // Estilos del cuadrado pequeño y desenfoque suave
         sq.style.width = `${size}px`;
         sq.style.height = `${size}px`;
-        sq.style.left = `${left}%`;
-        sq.style.top = `${topPx}px`;
         sq.style.backgroundColor = color;
+        sq.style.filter = `blur(${Math.max(0.5, size * 0.15)}px)`;
         
-        container.appendChild(sq);
+        // Asignar velocidad y retraso de flotamiento orgánico
+        const duration = Math.random() * 8 + 10; // 10s a 18s
+        const delay = Math.random() * -15;
+        sq.style.animation = `floatGlow ${duration}s ease-in-out ${delay}s infinite alternate`;
+        
+        wrapper.appendChild(sq);
+        container.appendChild(wrapper);
         
         squaresData.push({
-            element: sq,
+            element: wrapper,
             factor: factor
         });
     }
     
-    // Aplicar traducción en scroll
-    window.addEventListener("scroll", () => {
-        const scrolled = window.scrollY;
+    let mouseX = 0; // De -1 a 1 (offset horizontal)
+    let mouseY = 0; // De -1 a 1 (offset vertical)
+    
+    // Función para recalcular y aplicar las posiciones combinadas continuamente
+    function updatePositions() {
+        // Usar scroll suavizado de inercia o el scroll nativo
+        const scrolled = window.smoothedScrollY !== undefined ? window.smoothedScrollY : window.scrollY;
+        
         squaresData.forEach(data => {
-            data.element.style.transform = `translate3d(0, ${scrolled * (1 - data.factor)}px, 0)`;
+            // Desplazamiento horizontal y vertical por mouse (máx 25px)
+            const tx = mouseX * 25 * data.factor;
+            const ty = mouseY * 25 * data.factor;
+            
+            // Desplazamiento por scroll
+            const scrollTranslation = scrolled * (1 - data.factor);
+            
+            // Aplicar matriz de traducción 3D
+            data.element.style.transform = `translate3d(${tx}px, ${scrollTranslation + ty}px, 0)`;
         });
+        
+        requestAnimationFrame(updatePositions);
+    }
+    
+    // Escuchar movimiento del cursor
+    window.addEventListener("mousemove", (e) => {
+        // Normalizar posición del mouse respecto al centro de la ventana
+        mouseX = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2);
+        mouseY = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2);
     });
+    
+    // Iniciar loop de renderizado continuo para inercia y mouse fluidos
+    requestAnimationFrame(updatePositions);
 }
 
 /* --- MÓDULO 9: VISOR DE COMPONENTES DEL JUEGO (SHOWROOM) --- */
@@ -663,7 +687,7 @@ function initShowroom() {
                 desc: 'Habilidad secreta: permite a tu dupla mirar en secreto una de las esquinas del tablero. Mantengan el secreto y elijan su estrategia.',
                 color: '#00cc44',
                 title: 'Elijan una salida',
-                text: 'Solo tu dupla puede mirar una de las salidas del tablero. Mantengan el secreto y elijan su estrategia. Ningún otro jugador puede verla.',
+                text: 'Miren en secreto una de las salidas del tablero. Diseñen su estrategia sin revelarla al rival.',
                 icon: ``
             },
             {
@@ -674,7 +698,7 @@ function initShowroom() {
                 desc: '¡RETO! Un jugador cierra los ojos y coloca la pieza guiado únicamente por las instrucciones verbales de su compañero. Tienen 30 segundos; si falla, el turno es inválido.',
                 color: 'var(--magenta)',
                 title: 'Guía con voz',
-                text: 'Un jugador no puede mirar el tablero mientras el otro jugador le guía con la voz.',
+                text: 'Coloca la pieza con ojos cerrados, guiado únicamente por las instrucciones verbales de tu compañero.',
                 icon: `<svg viewBox="0 0 100 100" width="38" height="38" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M25 65 C25 60 28 55 33 55 V48 C33 48 30 46 30 40 C30 32 35 28 42 28 C49 28 52 32 52 40 C52 46 49 48 49 48 V55 C54 55 57 60 57 65" />
                     <path d="M63 43 A 5 5 0 0 1 63 53" />
@@ -691,7 +715,7 @@ function initShowroom() {
                 desc: '¡RETO! Ambos jugadores cierran los ojos. Deben encontrar la pieza correcta en su reserva y encajarla usando únicamente el tacto en menos de 30 segundos.',
                 color: 'var(--magenta)',
                 title: 'Sin mirar',
-                text: 'Una vez leída esta carta, cierren los ojos. Coloquen la pieza en el tablero usando solo el tacto. Tienen 30 segundos.',
+                text: 'Cierren los ojos. Encuentren y encajen la pieza en el tablero usando solo el tacto. Tienen 30 segundos.',
                 icon: `<svg viewBox="0 0 100 100" width="38" height="38" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round">
                     <path d="M20 50 C30 35 70 35 80 50 C70 65 30 65 20 50 Z" />
                     <circle cx="50" cy="50" r="10" />
@@ -706,7 +730,7 @@ function initShowroom() {
                 desc: '¡RETO! La dupla no puede hablar ni emitir sonidos. Deben coordinar la jugada y tomar decisiones usando únicamente gestos y lenguaje corporal.',
                 color: 'var(--magenta)',
                 title: 'Silencio total',
-                text: 'Prohibido hablar o emitir sonidos. Deben coordinar la jugada y tomar decisiones usando únicamente gestos.',
+                text: 'Prohibido hablar o emitir sonidos. Coordinen la jugada y decidan los caminos usando solo gestos.',
                 icon: `<svg viewBox="0 0 100 100" width="38" height="38" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round">
                     <path d="M35 55 Q 45 45 55 55 Q 45 65 35 55 Z" />
                     <path d="M20 55 H 30" />
@@ -722,7 +746,7 @@ function initShowroom() {
                 desc: '¡RETO! La dupla contraria toma el control total de tu turno. Ellos deciden qué pieza de tu reserva debes colocar y en qué posición del tablero se ubicará.',
                 color: 'var(--magenta)',
                 title: 'Pieza traidora',
-                text: 'El rival juega por ti esta ronda, eligiendo pieza y ubicación. No puedes intervenir. Usar un comodín cuenta como la jugada de esa ronda.',
+                text: 'El rival decide tu pieza y su ubicación. No puedes intervenir. Usar comodín consume el turno.',
                 icon: `<svg viewBox="0 0 100 100" width="38" height="38" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M30 75 V45 C30 40 35 35 40 35 C45 35 47 40 47 45 V55 H53 V40 C53 35 58 35 63 35 C68 35 70 40 70 45 V65 C70 75 55 85 45 85 H35" />
                     <circle cx="75" cy="50" r="8" fill="#ffffff"/>
@@ -736,7 +760,7 @@ function initShowroom() {
                 desc: '¡RETO! Al revelar la carta, el equipo rival inicia una cuenta regresiva de 5 segundos. Debes colocar la pieza antes de que se agote el tiempo.',
                 color: 'var(--magenta)',
                 title: 'Tiempo limitado',
-                text: '¡RÁPIDO! Tienes 5 segundos para colocar la pieza desde este momento. Si el tiempo termina y no está puesta, la jugada es inválida.',
+                text: '¡RÁPIDO! Tienes 5 segundos para colocar la pieza. Si el tiempo se agota, la jugada es inválida.',
                 icon: `<svg viewBox="0 0 100 100" width="38" height="38" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round">
                     <circle cx="50" cy="55" r="30" />
                     <path d="M50 35 V55 L65 65" />
@@ -871,7 +895,7 @@ function initShowroom() {
 
                     <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px; padding: 5px 0;">
                         <div class="card-3d-title" style="color: #ffffff; text-align: center; font-size: 8.5px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; margin: 0;">${item.title}</div>
-                        <p class="card-3d-text" style="color: rgba(255, 255, 255, 0.85) !important; text-align: center; font-size: 6.8px; line-height: 1.25; margin: 0 !important; font-weight: 300; padding: 0 2px;">${item.text}</p>
+                        <div class="card-3d-text" style="color: rgba(255, 255, 255, 0.85) !important; text-align: center; font-size: 6.8px; line-height: 1.25; margin: 0 !important; font-weight: 300; padding: 0 2px;">${item.text}</div>
                     </div>
                 </div>
             `;
@@ -882,7 +906,7 @@ function initShowroom() {
                     <div class="card-3d-title" style="color: #ffffff; text-align: center; font-size: 8.5px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; margin: 0; padding-top: 4px;">${item.title}</div>
                     
                     <div style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 5px 0;">
-                        <p class="card-3d-text" style="color: rgba(255, 255, 255, 0.85) !important; text-align: center; font-size: 6.8px; line-height: 1.25; margin: 0 !important; font-weight: 300; padding: 0 2px;">${item.text}</p>
+                        <div class="card-3d-text" style="color: rgba(255, 255, 255, 0.85) !important; text-align: center; font-size: 6.8px; line-height: 1.25; margin: 0 !important; font-weight: 300; padding: 0 2px;">${item.text}</div>
                     </div>
                     
                     <div style="display: flex; justify-content: center; align-items: center; height: 38px; margin-bottom: 2px;">
@@ -1242,4 +1266,145 @@ function initHeroCanvas() {
     
     animate();
 }
+
+/* --- MÓDULO 9: INDICADOR DE MANITO INTERACTIVA 3D --- */
+function initModelViewerGesturePrompt() {
+    const modelViewer = document.getElementById('caja-interactive-3d');
+    const gesturePrompt = document.getElementById('model-gesture-prompt');
+    if (!modelViewer || !gesturePrompt) return;
+    
+    const hidePrompt = () => {
+        gesturePrompt.classList.add('fade-out');
+        setTimeout(() => {
+            gesturePrompt.style.display = 'none';
+        }, 600);
+        modelViewer.removeEventListener('mousedown', hidePrompt);
+        modelViewer.removeEventListener('touchstart', hidePrompt);
+    };
+    
+    modelViewer.addEventListener('mousedown', hidePrompt);
+    modelViewer.addEventListener('touchstart', hidePrompt);
+}
+
+/* --- MÓDULO 10: SCROLL SUAVE CON INERCIA (ESTILO LOCOMOTIVE SCROLL) --- */
+function initSmoothScroll() {
+    // 1. Apilamiento de Secciones Seleccionadas (Section Stacking / Panel Overlay)
+    // Solo se superpone "Más allá del tablero" (#del-juego-al-sistema) sobre "Mecánica" (#mecanica),
+    // y "Hacia la exploración" (#cierre) sobre "Red de conceptos" (#mapa-relaciones).
+    // Esto evita conflictos con elementos fijos/sticky en otras secciones.
+    const pairs = [
+        { pinned: document.getElementById('mecanica'), overlay: document.getElementById('del-juego-al-sistema') },
+        { pinned: document.getElementById('mapa-relaciones'), overlay: document.getElementById('cierre') }
+    ];
+
+    pairs.forEach((pair, index) => {
+        if (!pair.pinned || !pair.overlay) return;
+
+        // Establecer z-index relativo de superposición (overlay superior a pinned)
+        const baseZ = (index + 1) * 10;
+        pair.pinned.style.zIndex = baseZ;
+        pair.pinned.style.position = 'relative';
+        pair.pinned.style.backgroundColor = '#050505';
+
+        pair.overlay.style.zIndex = baseZ + 5;
+        pair.overlay.style.position = 'relative';
+        pair.overlay.style.backgroundColor = '#050505';
+
+        const isTaller = pair.pinned.offsetHeight > window.innerHeight;
+
+        ScrollTrigger.create({
+            trigger: pair.pinned,
+            start: isTaller ? 'bottom bottom' : 'top top',
+            pin: true,
+            pinSpacing: false, // Permite que la sección posterior suba y cubra la fijada
+            scrub: true,
+            invalidateOnRefresh: true
+        });
+    });
+
+    // 2. Efecto Parallax en Títulos Cinéticos del Hero (Movimiento horizontal opuesto interactivo)
+    gsap.to('.row-1', {
+        x: 100,
+        ease: 'none',
+        scrollTrigger: {
+            trigger: '#slide-hero',
+            start: 'top top',
+            end: 'bottom top',
+            scrub: true
+        }
+    });
+
+    gsap.to('.row-2', {
+        x: -100,
+        ease: 'none',
+        scrollTrigger: {
+            trigger: '#slide-hero',
+            start: 'top top',
+            end: 'bottom top',
+            scrub: true
+        }
+    });
+
+    // Parallax en el contenedor 3D del Hero (Flotamiento vertical al hacer scroll)
+    gsap.to('.contenedor-3d-hero', {
+        y: 80,
+        ease: 'none',
+        scrollTrigger: {
+            trigger: '#slide-hero',
+            start: 'top top',
+            end: 'bottom top',
+            scrub: true
+        }
+    });
+
+    // 3. Parallax en los títulos de cada sección (Desplazamiento vertical leve de profundidad)
+    gsap.utils.toArray('.section-title').forEach((title) => {
+        gsap.to(title, {
+            y: -50,
+            ease: 'none',
+            scrollTrigger: {
+                trigger: title,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: true
+            }
+        });
+    });
+
+    // 4. Parallax en la galería de fotos
+    gsap.to('.galeria-viewport', {
+        y: -40,
+        ease: 'none',
+        scrollTrigger: {
+            trigger: '.galeria-slider-container',
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true
+        }
+    });
+
+    // 5. Animaciones de Revelación por ScrollTrigger (GSAP)
+    gsap.utils.toArray('.reveal').forEach((elem) => {
+        gsap.fromTo(elem, 
+            { 
+                opacity: 0, 
+                y: 35,
+                scale: elem.classList.contains('concepto-card') ? 0.98 : 1
+            },
+            {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                duration: 0.65,
+                ease: 'power1.out',
+                scrollTrigger: {
+                    trigger: elem,
+                    start: 'top 88%',
+                    toggleActions: 'play none none reverse'
+                }
+            }
+        );
+    });
+}
+
 

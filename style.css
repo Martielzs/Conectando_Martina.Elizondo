@@ -26,7 +26,7 @@ body {
 }
 
 
-/* Fondo de cuadraditos petit con scroll (Paralaje) */
+/* Fondo de cuadraditos de exploración con scroll (Paralaje y Auroras) */
 #fondo-cuadrados-scroll {
     position: absolute;
     top: 0;
@@ -38,13 +38,34 @@ body {
     overflow: hidden;
 }
 
+.parallax-wrapper {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    will-change: transform;
+}
+
 .cuadradito-petit {
     position: absolute;
-    border-radius: 1px;
-    opacity: 0.12;
-    filter: blur(2px);
-    transition: transform 0.1s ease-out;
-    will-change: transform;
+    border-radius: 4px; /* Bordes levemente suavizados para el look digital */
+    mix-blend-mode: screen;
+    opacity: 0.12; /* Opacidad baja pero visible para cuadrados más chicos */
+    will-change: transform, opacity;
+    transform-origin: center center;
+}
+
+@keyframes floatGlow {
+    0% {
+        transform: rotate(0deg) scale(0.92);
+        opacity: 0.08;
+    }
+    50% {
+        opacity: 0.16;
+    }
+    100% {
+        transform: rotate(45deg) scale(1.08);
+        opacity: 0.08;
+    }
 }
 
 
@@ -616,7 +637,7 @@ body.loading {
     display: flex;
     flex-direction: row;
     width: 100%;
-    align-items: center; /* Centra verticalmente el render con el texto */
+    align-items: flex-start; /* Cambiado a flex-start para habilitar el comportamiento sticky */
     justify-content: space-between;
     gap: 40px; /* Espaciado controlado entre las dos secciones */
 }
@@ -627,14 +648,18 @@ body.loading {
     max-width: 450px; /* Evita que el texto se desparrame en pantallas gigantes */
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
     align-items: flex-start;
+    justify-content: flex-start;
 }
 
-/* COLUMNA RENDER: Le damos más espacio para que el modelo luzca gigante */
+/* COLUMNA RENDER: Le damos más espacio y lo hacemos sticky en pantallas de escritorio */
 .columna-render {
     flex: 0 0 55%; /* Se lleva el 55% restante del espacio */
     width: 100%;
+    position: sticky;
+    top: 100px;
+    align-self: start;
+    will-change: transform;
 }
 
 /* El contenedor interno 3D adaptado para máxima fluidez */
@@ -1518,8 +1543,11 @@ p,
 
 .showroom-thumbnails {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 10px;
-    overflow-x: auto;
+    max-width: 380px;
+    margin: 0 auto;
     padding-bottom: 8px;
     border-top: 1px solid rgba(255, 255, 255, 0.03);
     padding-top: 16px;
@@ -2103,44 +2131,65 @@ p,
     background-color: #050505;
 }
 
-/* --- Fundamentos (Texto Explicativo Alineado) --- */
-.fundamento-texto-explicativo {
+/* --- Fundamentos (Rediseño de Re-diagramación Editorial) --- */
+.fundamento-content {
+    max-width: 1200px;
+    margin: 50px auto 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 48px;
-    margin-top: 60px;
+    gap: 60px;
+}
+
+.fundamento-intro {
+    max-width: 820px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.fundamento-conceptos-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
     width: 100%;
-    max-width: 800px;
 }
 
-.fundamento-item {
-    border-left: 2px solid rgba(230, 255, 0, 0.15);
-    padding-left: 24px;
-    transition: border-color 0.3s ease;
+.concepto-card {
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.01);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    border-radius: 4px;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
-.fundamento-item:hover {
-    border-left-color: var(--yellow);
+.concepto-card:hover {
+    border-color: rgba(230, 255, 0, 0.2);
+    background-color: rgba(255, 255, 255, 0.02);
 }
 
-.fundamento-concept {
+.concepto-title {
     font-family: 'Geist Mono', monospace;
     font-size: 11px;
     letter-spacing: 2px;
-    color: var(--yellow);
+    color: var(--yellow) !important;
     text-transform: uppercase;
-    margin: 0 0 10px 0;
+    margin: 0 0 12px 0 !important;
 }
 
-.fundamento-para {
-    font-size: 0.98rem;
-    line-height: 1.6;
-    color: rgba(255, 255, 255, 0.65);
-    margin: 0;
+.concepto-text {
+    font-size: 13px !important;
+    line-height: 1.65 !important;
+    color: rgba(255, 255, 255, 0.55) !important;
+    margin: 0 !important;
+    font-weight: 300;
 }
 
 /* --- Responsive Adaptability --- */
 @media (max-width: 1024px) {
+    .fundamento-conceptos-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+    }
     .traduccion-wrapper {
         flex-direction: column;
         gap: 40px;
@@ -2419,4 +2468,264 @@ p,
     .floating-pieces-container {
         display: none !important;
     }
+}
+
+/* --- Interacciones de Filas de Comparativa en Más Allá del Tablero --- */
+.traduccion-fila:not(.header-fila) {
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    border-left: 2px solid transparent;
+}
+
+.traduccion-fila:not(.header-fila):hover {
+    background-color: rgba(255, 255, 255, 0.02);
+    padding-left: 14px;
+    color: #ffffff;
+}
+
+/* Luces neon en hover de filas secuenciales (Cian, Magenta, Amarillo) */
+.traduccion-fila:not(.header-fila):nth-child(2):hover {
+    border-left-color: var(--cyan);
+}
+.traduccion-fila:not(.header-fila):nth-child(2):hover .trad-indicator {
+    background-color: var(--cyan);
+    box-shadow: 0 0 12px var(--cyan);
+    transform: scale(1.6);
+}
+
+.traduccion-fila:not(.header-fila):nth-child(3):hover {
+    border-left-color: var(--magenta);
+}
+.traduccion-fila:not(.header-fila):nth-child(3):hover .trad-indicator {
+    background-color: var(--magenta);
+    box-shadow: 0 0 12px var(--magenta);
+    transform: scale(1.6);
+}
+
+.traduccion-fila:not(.header-fila):nth-child(4):hover {
+    border-left-color: var(--yellow);
+}
+.traduccion-fila:not(.header-fila):nth-child(4):hover .trad-indicator {
+    background-color: var(--yellow);
+    box-shadow: 0 0 12px var(--yellow);
+    transform: scale(1.6);
+}
+
+.traduccion-fila:not(.header-fila):nth-child(5):hover {
+    border-left-color: var(--cyan);
+}
+.traduccion-fila:not(.header-fila):nth-child(5):hover .trad-indicator {
+    background-color: var(--cyan);
+    box-shadow: 0 0 12px var(--cyan);
+    transform: scale(1.6);
+}
+
+.traduccion-fila:not(.header-fila):nth-child(6):hover {
+    border-left-color: var(--magenta);
+}
+.traduccion-fila:not(.header-fila):nth-child(6):hover .trad-indicator {
+    background-color: var(--magenta);
+    box-shadow: 0 0 12px var(--magenta);
+    transform: scale(1.6);
+}
+
+.trad-indicator {
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================
+   19. FOOTER EDITORIAL Y CRÉDITOS (UX PORTFOLIO STYLE)
+   ========================================================== */
+.footer-editorial {
+    width: 100%;
+    padding: 95px 8vw; /* Franja de footer más ancha y espaciosa para dar más aire */
+    background-color: #0B0F19; /* Near Black */
+    border-top: 1px solid rgba(255, 255, 255, 0.05); /* Fina y elegante línea gris oscuro divisor */
+    position: relative;
+    z-index: 2;
+}
+
+.footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Alineados perfectamente al centro vertical */
+    gap: 40px;
+    width: 100%;
+}
+
+.footer-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0px; /* Separación manejada por line-height */
+    text-align: left;
+}
+
+.footer-line-1 {
+    font-size: 16px !important; /* Aumentado para mayor visibilidad */
+    font-weight: 600 !important; /* SemiBold / Medium */
+    color: #FFFFFF !important; /* Blanco Puro */
+    margin: 0 !important;
+    line-height: 1.5 !important; /* Interlineado holgado */
+}
+
+.footer-line-2 {
+    font-size: 14px !important; /* Aumentado */
+    font-weight: 400 !important; /* Regular */
+    color: #D1D5DB !important; /* Gris claro */
+    margin: 0 !important;
+    line-height: 1.5 !important;
+}
+
+.footer-line-3 {
+    font-size: 14px !important; /* Aumentado */
+    font-weight: 400 !important; /* Regular */
+    color: #D1D5DB !important; /* Mismo gris que línea 2 para consistencia de datos */
+    margin: 0 !important;
+    line-height: 1.5 !important;
+}
+
+.footer-line-4 {
+    font-size: 13px !important; /* Nombre completo de la escuela un punto menor */
+    font-weight: 400 !important; /* Regular */
+    color: #9CA3AF !important; /* Gris medio legible */
+    margin: 0 !important;
+    line-height: 1.5 !important;
+}
+
+.footer-right {
+    display: flex;
+    align-items: center;
+}
+
+.footer-logo-container {
+    display: flex;
+    align-items: center;
+    gap: 24px; /* Separación de logos aumentada */
+}
+
+.logo-color-pucv {
+    height: 65px; /* Logos aún más grandes para gran presencia */
+    width: auto;
+    opacity: 0.85;
+    transition: all 0.3s ease;
+}
+
+.logo-color-ead {
+    height: 38px; /* Logo ead aumentado de forma proporcional */
+    width: auto;
+    opacity: 0.85;
+    transition: all 0.3s ease;
+}
+
+.footer-logo-divider {
+    width: 1px;
+    height: 35px; /* Divisor vertical proporcional */
+    background-color: #374151; /* Gris oscuro #374151 */
+}
+
+.logo-color-pucv:hover, .logo-color-ead:hover {
+    opacity: 1;
+    transform: scale(1.03);
+}
+
+/* Responsividad para móviles y tabletas */
+@media (max-width: 768px) {
+    .footer-inner {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 30px;
+    }
+    
+    .footer-left {
+        text-align: center;
+        align-items: center;
+    }
+    
+    .footer-logo-container {
+        justify-content: center;
+    }
+}
+
+/* ==========================================================
+   20. CUSTOM SCROLLBAR & 3D INTERACTION PROMPT
+   ========================================================== */
+
+/* Custom Scrollbar - Estilo del Sistema (Deja leer bien sin romper la navegación) */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #000000;
+    border-left: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+    border: 2px solid #000000;
+    transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--cyan);
+}
+
+/* --- GESTURE PROMPT FOR 3D MODEL --- */
+.interactive-gesture-prompt {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(3px);
+    z-index: 5;
+    pointer-events: none; /* Deja pasar clicks al model-viewer */
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), backdrop-filter 0.6s ease;
+    border-radius: 4px;
+}
+
+.interactive-gesture-prompt.fade-out {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+}
+
+.gesture-hand-svg {
+    width: 55px;
+    height: 55px;
+    margin-bottom: 12px;
+}
+
+.gesture-text {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #ffffff;
+    opacity: 0.85;
+}
+
+@keyframes handDrag {
+    0% { transform: translateX(-10px) rotate(-8deg); }
+    50% { transform: translateX(10px) rotate(8deg); }
+    100% { transform: translateX(-10px) rotate(-8deg); }
+}
+
+.hand-icon-drag {
+    animation: handDrag 2s ease-in-out infinite;
+    transform-origin: 50% 80%;
+}
+
+/* Forzar fondos sólidos en las secciones de apilamiento para evitar transparencias y textos encimados */
+#del-juego-al-sistema, #cierre {
+    background-color: #050505 !important;
 }
